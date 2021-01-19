@@ -13,18 +13,141 @@
           company: "SecureKey", companyURL: "https://securekey.com/"
         }],
         github: "https://github.com/trustbloc/did-method-orb",
+        localBiblio: {
+          sidetree: {
+            title: "Sidetree",
+            href: "https://identity.foundation/sidetree/spec/",
+            publisher: "Decentralized Identity Foundation",
+            status: "Editor’s Draft"
+          }
+        }
       };
     </script>
   </head>
   <body>
     <section id='abstract'>
       <p>
+        Orb is a decentralized identifier (DID) method based on a federated and replicated Verifiable Data Registry (VDR).
+        The decentralized network consists of servers that write, monitor, witness, and propogate batches of DID operations.
+        The batches form a graph that is propogated and replicated between the servers as content-addressable objects.
+        These content-addressable objects can be located via both domain and distributed hash table (DHT) mechanisms.
+        Each witness server observes a subset of batches in the graph and includes them in their append-only logs (as Merkle Trees).
+        The servers coordinate by propogating batches of DID operations and by monitoring the applicable witness servers' append-only logs.
+        The Orb servers form a decentralized network without reliance on a common blockchain for coordination.
+      </p>
+
+      <p>
+        This document specifies the Orb DID Method along with a data model and rules for representing a graph of batches, 
+        the Orb server API, a registry of protocol versions and parameters,
+        an [[[activitystreams-core]]] vocabulary and an [[[activitypub]]] profile for propogating batches,
+        a [[[rfc7033]]] profile for discovering endpoints, a [[[sidetree]]] protocol profile for encoding DID operations,
+        and a [[[rfc6962]]] profile for witness logs.
       </p>
     </section>
     <section id='sotd'>
       <p>
       </p>
     </section>
+    
+    <section class="informative">
+        <h2>Introduction</h2>
+        <p>
+        </p>
+
+    </section>
+
+    <section class="normative">
+        <h2 id="format">The did:orb Format</h2>
+
+        <p>
+            The format for the <tt>did:orb</tt> method conforms to the [[[DID-CORE]]] specification.
+        </p>
+    </section>
+
+    <section class="normative">
+        <h2>Operations</h2>
+
+        <p>
+        </p>
+
+        <section class="normative">
+            <h3>Create</h3>
+
+            <p>
+            </p>
+        </section>
+
+        <section class="normative">
+            <h3>Read</h3>
+
+            <p>
+            </p>
+        </section>
+
+        <section class="normative">
+            <h3>Update</h3>
+
+            <p>
+            </p>
+        </section>
+
+        <section class="normative">
+            <h3>Deactivate</h3>
+
+            <p>
+            </p>
+        </section>
+    </section>
+
+    <section class="normative">
+        <h2>Transaction Graph</h2>
+
+        <p>
+        </p>
+
+        <section class="normative">
+            <h3>Content Addressable Storage</h3>
+
+            <p>
+            </p>
+        </section>
+
+        <section class="normative">
+            <h3>Transaction</h3>
+
+            <p>
+            </p>
+        </section>
+
+        <section class="normative">
+            <h3>Sidetree Protocol</h3>
+
+            <p>
+            </p>
+        </section>
+    </section>
+
+    <section class="normative">
+        <h2>Node Interconnections</h2>
+
+        <p>
+        </p>
+    </section>
+
+    <section class="normative">
+        <h2>Witnesses</h2>
+
+        <p>
+        </p>
+    </section>
+
+    <section class="informative">
+        <h2>Security and Privacy Considerations</h2>
+
+        <p>
+        </p>
+    </section>
+        
     <section id='conformance'>
       <!-- This section is filled automatically by ReSpec. -->
     </section>
