@@ -54,6 +54,12 @@
         <p>
         </p>
 
+        <p>
+          The Orb DID method is an extension of the DIF Sidetree protocol.
+          By using the Sidetree protocol, the DID controller forms their own verifiable chain of patches from inception to the current state of the DID document.
+          These verifiable chains are included into larger batches by one of the independent hosts and encoded as content-addressable objects.
+        </p>
+
     </section>
 
     <section class="normative">
@@ -61,8 +67,37 @@
 
         <p>
             The format for the <tt>did:orb</tt> method conforms to the [[[DID-CORE]]] specification.
+            The DID scheme consists of the did:orb prefix, the mechanism for discovering content-addressable objects,
+            a content identifier (CID) for the minimum node in the DID operation batch graph, and the unique suffix of the DID.
         </p>
-    </section>
+        
+        <p>  
+            The method uses the following ABNF [[rfc5234]] format:
+        </p>
+
+        <pre>
+          did-orb-format       = "did:orb:" cas-discovery-scheme ":" 
+                                 min-graph-cid ":" unique-suffix
+          cas-discovery-scheme = dht-scheme / dns-scheme
+          dht-scheme           = ( "ipfs" )
+          dns-scheme           = "dns:" reg-name
+          reg-name             = 1*idchar                ; more constrained than [rfc3986]
+          min-graph-cid        = 1*idchar
+          unique-suffix        = 1*idchar
+        </pre>
+
+        <p>
+          See [[?rfc3986]] for the original definition of reg-name and [[DID-CORE]] for the definition of idchar.
+        </p>
+
+        <pre class="example" title="An Orb DID that uses the DNS scheme for content discovery">
+          did:orb:dns:example.com:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        </pre>
+
+        <pre class="example" title="An Orb DID that uses the IPFS scheme for content discovery">
+          did:orb:ipfs:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        </pre>
+      </section>
 
     <section class="normative">
         <h2>Operations</h2>
@@ -142,12 +177,30 @@
     </section>
 
     <section class="informative">
-        <h2>Security and Privacy Considerations</h2>
+        <h2>Security Considerations</h2>
 
         <p>
         </p>
     </section>
         
+    <section class="informative">
+      <h2>Privacy Considerations</h2>
+
+      <section class="informative">
+        <h3>Keep Personally-Identifiable Information (PII) Private</h3>
+
+        <p>
+        </p>
+      </section>
+
+      <section class="informative">
+        <h3>DID Correlation Risks and Pseudonymous DIDs</h3>
+
+        <p>
+        </p>
+      </section>
+    </section>
+
     <section id='conformance'>
       <!-- This section is filled automatically by ReSpec. -->
     </section>
