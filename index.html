@@ -32,8 +32,8 @@
         The decentralized network consists of Orb servers that write, monitor, witness, and propagate batches of DID operations.
         The batches form a graph that is propagated and replicated between the servers as content-addressable objects.
         These content-addressable objects can be located via both domain and distributed hash table (DHT) mechanisms.
-        Each Orb witness server observes a subset of batches in the graph and includes them in their append-only logs (as Merkle Trees).
-        The servers coordinate by propagating batches of DID operations and by monitoring the applicable witness servers' append-only logs.
+        Each Orb witness server observes a subset of batches in the graph and includes them in their ledgers (as append-only Merkle Tree logs).
+        The servers coordinate by propagating batches of DID operations and by monitoring the applicable witness servers' ledgers.
         The Orb servers form a decentralized network without reliance on a common blockchain for coordination.
       </p>
 
@@ -42,7 +42,7 @@
         the Orb server API, a registry of protocol versions and parameters,
         an [[[ACTIVITYSTREAMS-CORE]]] vocabulary and an [[[ACTIVITYPUB]]] profile for propagating batches,
         a [[[RFC7033]]] profile for discovering endpoints, a [[[SIDETREE]]] protocol profile for encoding DID operations,
-        and a [[[RFC6962]]] profile for witness logs.
+        and a [[[RFC6962]]] profile for witness ledgers.
       </p>
     </section>
     <section id='sotd'>
@@ -53,45 +53,48 @@
     <section class="informative">
         <h2>Introduction</h2>
         <p>
-          The Orb DID method enables users or entities to create <a href="https://identity.foundation/sidetree/spec/#did-uri-composition"><i>self certifying</i></a>
+          The Orb DID method enables users or entities to create <a href="https://identity.foundation/sidetree/spec/#did-uri-composition">self certifying</a>
           decentralized identifiers (DIDs) that are propagated across a decentralized network without reliance on a common blockchain for coordination.
-          Decentralized identifiers [[DID-CORE]] are a fundamental building block to enable persons and entities to prove control of an identifier
+          Decentralized identifiers [[DID-CORE]] are a fundamental building block to enable persons and entities to prove that they control an identifier
           that is attached to digital objects such as Verifiable Credentials [[VC-DATA-MODEL]].
         </p>
 
         <p>
           Systems that rely on <i>self certifying</i> DIDs need a
-          mechanism to propagate the ordered updates to DID documents from the operation writer to their DID resolver.
+          mechanism to propagate the ordered updates to DID documents from the server writing operations to their DID resolver.
           As an example, operations can be distributed via a content-addressable network (such as <a href="https://ipfs.io">IPFS</a>)
           and announced on a public blockchain (such as <a href="https://bitcoin.org">Bitcoin</a>) or a permissioned blockchain
           (such as <a href="https://www.hyperledger.org/use/fabric">Hyperledger Fabric</a>). This DID method, instead, makes use of
           decentralized federation protocols to propagate announcements and replicate content in a <a href="https://en.wikipedia.org/wiki/Gossip_protocol">gossip manner</a>.
+          By using a decentralized federation mechanism, we have no need to choose a common blockchain nor rely on a consortium's
+          <a href="https://en.wikipedia.org/wiki/Distributed_ledger">distributed ledger</a> (DLT) for coordination.
+          Orb has the ability to enable use cases where a public blockchain is not acceptable to stakeholders and also avoids lock-in to a single DLT. 
         </p>
 
         <p>
           As operations on DIDs can be originated by different writers in a decentralized network, it is also beneficial to enable a mechanism for determining
           the latest operations for a particular suffix. For example, when all DID operations are announced by the same blockchain, the other systems can
           monitor that blockchain for the latest operations. These blockchains can also provide relative timing in cases of 
-          <a href="https://identity.foundation/sidetree/spec/#late-publishing">late publishing</a>. This DID method, instead, makes use of independent witness logs
-          that the DID owner can associate with their DID. These witness logs can be monitored as an additional propogation source and proofs from these logs can
-          also provide relative timing confidence in cases of late publishing. Rather than being a global chain of all operation announcements, these logs contain
+          <a href="https://identity.foundation/sidetree/spec/#late-publishing">late publishing</a>. This DID method, instead, makes use of independent witness ledgers
+          that the DID owner can associate with their DID. These witness ledgers can be monitored as an additional propogation source and proofs from these ledgers can
+          also provide relative timing confidence in cases of late publishing. Rather than being a global chain of all operation announcements, these ledgers contain
           a subset of the announcements that propagate through the decentralized federation protocols.
         </p>
           
         <p>
-          The property of <i>self certifying</i> DIDs is obtained due to Orb being an extension of the [[[SIDETREE]]] protocol.
+          The property of self certifying DIDs is obtained due to Orb being an extension of the [[[SIDETREE]]] protocol.
           By using the Sidetree protocol, the DID controller forms their own verifiable chain of patches from inception to the current state of the DID document.
           These verifiable chains are included into larger batches by one of the independent Orb servers and encoded as content-addressable objects. We also
           inherit the scalability properties of the Sidetree protocol batch strategy.
         </p>
 
         <p>
-          Our motivation for the Orb DID method was to enable many independent organizations to create <a href="https://www.w3.org/TR/did-core/#dfn-verifiable-data-registry">
+          Our motivation for the Orb DID method is to enable many independent organizations to create <a href="https://www.w3.org/TR/did-core/#dfn-verifiable-data-registry">
           Verifiable Data Registries</a> (VDRs) that can become connected over time.
-          In designing Orb, we had the goal to enable these VDRs to interconnect into a decentralized network without the need to choose a common public
-          blockchain or to rely on special-purpose consortiums to form (and remain in operation). Orb enables usage of <i>self-certifying</i> DIDs where leveraging a
-          public blockchain is not acceptable but still retains the scalability properties of Sidetree batching and a decentralized network for propagating and replicating
-          changes to DID documents.
+          In designing Orb, we have the goal to enable these VDRs to interconnect into a decentralized network without the need to choose a common public
+          blockchain or to rely on special-purpose consortiums to form (and remain in operation). By using decentralized federation protocols and witness ledgers, 
+          we enable <i>self-certifying</i> DIDs even in use cases where leveraging a public blockchain or a consortium DLT is not acceptable to stakeholders.
+          Orb enables a federated, replicated and scalable VDR based on a decentralized network for propagating, witnessing and replicating changes to DID documents.
         </p>
 
     </section>
@@ -100,18 +103,100 @@
       <h2 id="format">Concepts</h2>
 
       <section class="normative">
-        <h3>Self-Certifying Decentralized Identifiers</h3>
+        <h3>Self Certifying Decentralized Identifiers</h3>
+
+        <p>
+          Orb DIDs are <i>self certifying</i>.
+          The data structure that encodes the ordered updates to a DID document form their own verifiable chain from inception to the current state of the DID document.
+          We inherit this property due to our usage of the [[[SIDETREE]]] protocol for encoding the DID document updates.
+        </p>
+      </section>
+
+      <section class="normative">
+        <h3>Propagation via Decentralized Federation</h3>
+
+        <p>
+          Orb makes use of decentralized federation protocols to propagate announcements and replicate content in a
+          <a href="https://en.wikipedia.org/wiki/Gossip_protocol">gossip manner</a>. We use [[[ACTIVITYSTREAMS-CORE]]] and [[[ACTIVITYPUB]]].
+          In later sections, we describe the vocabulary and profile for using these protocols in Orb.
+        </p>
+      </section>
+
+      <section class="normative">
+        <h3>DID Updates Are Batched</h3>
+
+        <p>
+          Modifications to DID documents that are sent to an Orb servers are aggregated into a batches prior to being announced on the decentralized network.
+          By supporting batching, we enhance the scalability properties due to a reduction in messages and objects being stored.
+          We inherit this property due to our usage of the [[[SIDETREE]]] protocol for encoding the DID document updates.
+        </p>
+      </section>
+
+      <section class="normative">
+        <h3>DID Updates Batches Form a Graph</h3>
+
+        <p>
+          When writing a batch of DID document updates, an Orb server also includes immutable references to the prior batches.
+          These references form a graph (in the form of a Merkle Tree) such that the ancestor operations can be processed prior to a newly observed batch.
+          This property is needed in the Orb data structures since we do not have a common blockchain to provide this history.
+        </p>
+
+        <p>
+          When a DID controller supplies their DID, they also include a reference to a batch in their DID string. This reference allows an Orb server to discover
+          the graph where a DID was created (or more generally where a <a href="https://identity.foundation/sidetree/spec/#core-index-file">core</a> update occurred).
+          This reference also enables the DID controller to specify a minimum version of the DID document that must be discovered in order to resolve.
+        </p>
+      </section>
+
+      <section class="normative">
+        <h3>CAS-based Verifiable Data Registry</h3>
+
+        <p>
+          The Orb VDR leverages <a href="https://en.wikipedia.org/wiki/Content-addressable_storage">Content-Addressable Storage</a> (CAS) to hold the DID document batch files.
+          The processed batch files result in hosting resolvable DID documents.
+          By supporting a CAS, we enhance the ability to replicate immutable content across the decentralized network.
+          We inherit this property due to our usage of the [[[SIDETREE]]] protocol for encoding the DID document updates and batches.
+        </p>
+
+        <p>
+          We also leverage the CAS to hold the graph of batches. The immutable references to prior batches are in the form of <a href="https://docs.ipfs.io/concepts/content-addressing/">content identifiers</a> (CIDs).
+        </p>
+      </section>
+
+      <section class="normative">
+        <h3>Witness Ledgers</h3>
+
+        <p>
+          Orb servers are capable of witnessing individual batches that form the overall graph.
+          These witnesses use independent append-only Merkle Tree logs as their Witness ledger.
+          We structure witnesses ledgers in a similar manner to certificate transparency [[[RFC6962]]].
+        </p>
 
         <p>
         </p>
       </section>
 
       <section class="normative">
-        <h3>Decentralized Federation Protocols</h3>
-          This DID method makes use of decentralized federation protocols to propagate announcements and replicate content in a
-          <a href="https://en.wikipedia.org/wiki/Gossip_protocol">gossip manner</a>. We use [[[ACTIVITYSTREAMS-CORE]]] and [[[ACTIVITYPUB]]].
-          In later sections, we describe the vocabulary and profile for using these protocols in Orb.
+        <h3>Distributed Hash Tables are Supported</h3>
+
         <p>
+          Orb servers MAY choose to expose their CAS-based VDRs on a <a href="https://en.wikipedia.org/wiki/Distributed_hash_table">Distributed Hash Table</a> (DHT) network such as IPFS. 
+        </p>
+
+        <p>
+          TODO
+        </p>
+      </section>
+
+      <section class="normative">
+        <h3>Server to Server APIs are Supported</h3>
+
+        <p>
+          The Orb DID method treats Server to Server APIs as first-class. 
+        </p>
+
+        <p>
+          TODO
         </p>
       </section>
 
