@@ -76,7 +76,7 @@
           the latest operations for a particular suffix. For example, when all DID operations are announced by the same blockchain, the other systems can
           monitor that blockchain for the latest operations. These blockchains can also provide relative timing in cases of 
           <a href="https://identity.foundation/sidetree/spec/#late-publishing">late publishing</a>. This DID method, instead, makes use of independent witness ledgers
-          that the DID owner can associate with their DID. These witness ledgers can be monitored as an additional propogation source and proofs from these ledgers can
+          that the DID owner can associate with their DID. These witness ledgers can be monitored as an additional propagation source and proofs from these ledgers can
           also provide relative timing confidence in cases of late publishing. Rather than being a global chain of all operation announcements, these ledgers contain
           a subset of the announcements that propagate through the decentralized federation protocols.
         </p>
@@ -120,13 +120,18 @@
           <a href="https://en.wikipedia.org/wiki/Gossip_protocol">gossip manner</a>. We use [[[ACTIVITYSTREAMS-CORE]]] and [[[ACTIVITYPUB]]].
           In later sections, we describe the vocabulary and profile for using these protocols in Orb.
         </p>
+
+        <p>
+          Orb does not rely on public blockchains nor DLTs to coordinate - there is no need for network consensus. Instead, we rely on
+          self certifying DIDs being propagated and the ability to replicate VDRs in a gossip manner. 
+        </p>
       </section>
 
       <section class="normative">
         <h3>DID Updates Are Batched</h3>
 
         <p>
-          Modifications to DID documents that are sent to an Orb servers are aggregated into a batches prior to being announced on the decentralized network.
+          Modifications to DID documents that are sent to an Orb servers are aggregated into batches prior to being announced on the decentralized network.
           By supporting batching, we enhance the scalability properties due to a reduction in messages and objects being stored.
           We inherit this property due to our usage of the [[[SIDETREE]]] protocol for encoding the DID document updates.
         </p>
@@ -143,7 +148,7 @@
 
         <p>
           When a DID controller supplies their DID, they also include a reference to a batch in their DID string. This reference allows an Orb server to discover
-          the graph where a DID was created (or more generally where a <a href="https://identity.foundation/sidetree/spec/#core-index-file">core</a> update occurred).
+          the graph where a DID was created (or more generally where a <a href="https://identity.foundation/sidetree/spec/#core-index-file">core Sidetree</a> update occurred).
           This reference also enables the DID controller to specify a minimum version of the DID document that must be discovered in order to resolve.
         </p>
       </section>
@@ -164,15 +169,79 @@
       </section>
 
       <section class="normative">
-        <h3>Witness Ledgers</h3>
+        <h3>Witnesses and Checkpoints Resolve Forks</h3>
 
         <p>
-          Orb servers are capable of witnessing individual batches that form the overall graph.
-          These witnesses use independent append-only Merkle Tree logs as their Witness ledger.
-          We structure witnesses ledgers in a similar manner to certificate transparency [[[RFC6962]]].
+          The Orb method relies on decentralized federation, gossip and CAS replication mechanisms to propagate
+          the VDR among servers. The self certifying nature of Orb DIDs enables confidence in the DID validity without the need
+          for network consensus, except in cases of <a href="https://identity.foundation/sidetree/spec/#late-publishing">late publishing</a>
+          or due to resolver servers not following sufficient propagation sources. As noted in the Sidetree specification, late publishing
+          forks are caused by the DID Controller's secrets being used - "DID owners can create forks within their own DID state history" - rather
+          than being an artifact of consensus mechanisms.
+          Resolver systems choose the first published fork and we use checkpoints and witness ledgers to increase confidence in determining the relative timing.
         </p>
 
         <p>
+          In the absence of Witness ledgers, we start with a simple rule: the first fork of a DID observed by an Orb server is the first published fork
+          for that DID <i>from that server's point of view</i>. As Orb servers become increasingly interconnected, batches are gossiped between
+          the Orb servers. Each server that forwards a batch includes a signed timestamp of when they observed the batch. The Orb Server MAY
+          designate some of the other Orb servers as <i>trusted</i>. These trusted servers are then used to determine relative timing between two batches.
+          In the case that a majority viewpoint of itself and the other <i>trusted</i> Orb servers, that majority viewpoint will be used to
+          determine the relative timing of the batches. From the relative timing of the batches, we also resolve the relative timing of the fork in the DID.
+          An Orb server does not wait for consensus - its viewpoint may change over time in these situations.
+        </p>
+
+        <p>
+          Although Orb Servers decideb who to designate as trusted, it is also important that their behavior can be monitored.
+          We use a Witness ledger as the mechanism for monitoring behavior - if inconsistencies are detected, other systems can adjust their viewpoint
+          for trustworthiness.
+          A Witness ledger is responsible for recording individual Orb transactions, providing a proof
+          that can be embedded within an Orb transaction, and providing an API that exposes their ledger.
+          A Witness ledger is not responsible for maintaining the graph structure nor is it responsible for
+          maintaining a complete history of Orb transactions.
+          We structure witnesses ledgers in a similar manner to certificate transparency [[RFC6962]],
+          as append-only Merkle Trees. An Orb server is monitorable by exposing a Witness ledger API.
+        </p>
+
+        <p>
+          When an Orb server creates a transaction, the server MAY request other Orb servers to include the transaction into their
+          Witness ledger and receive back a proof. The transaction and Witness proofs are then written into the CAS and propagated.
+          When these proofs originate from servers that are designated as <i>trusted</i>, their timing information is immediately applied
+          when forming an Orb server's viewpoint of timing.
+        </p>
+        
+        <p>
+          A fork can also be explicitly resolved when the DID controller publishes a <i>checkpoint</i>,
+          as an operation that is included into a propagated <a href="https://identity.foundation/sidetree/spec/#core-index-file">Sidetree core index</a>.
+          The checkpoint may reference multiple forks and explicitly choose one of them.
+        </p>
+      </section>
+
+      <section class="normative">
+        <h3>Witnesses Propagate for a Suffix</h3>
+        <p>
+          As Orb relies on gossip replication, it is possible for a resolver system to miss transactions originating from other servers that they do not follow.
+          To mitigate this issue for a particular DID, we allow the DID controller to specify a policy.
+          The policy states the Orb server(s) that MUST be used as witnesses for batches that the DID is included within.
+          The Writer server ensures that, according to the DID's policy, a sufficient number of these server(s) are also acceptable as Witnesses to the Writer server.
+          If the DID's policy is unacceptable to the Writer server, the operation MUST be rejected and not included into the Orb transaction. The
+          DID policy ensures that the Resolver Servers can determine if they have the latest propagations and that the DID controller can use any
+          Writer server that has mutually acceptable policies.
+        </p>
+
+        <p>
+          The ability to set (or change) the policy is an operation that is included into a propagated <a href="https://identity.foundation/sidetree/spec/#core-index-file">Sidetree core index</a>.
+        </p>
+
+      </section>
+
+      <section class="normative">
+        <h3>Web Discovery APIs are Supported</h3>
+
+        <p>
+          The Orb DID method enables CAS discovery and usage via Web APIs. The WebFinger protocol [[RFC7033]] allows systems to query for both
+          [[ACTIVITYPUB]] endpoints and also for CAS endpoints for a given resource. By enabling a fully Web-enabled model, we do not introduce
+          a requirement on <a href="https://en.wikipedia.org/wiki/Distributed_hash_table">Distributed Hash Table</a> (DHT) usage into the method.
         </p>
       </section>
 
@@ -180,24 +249,22 @@
         <h3>Distributed Hash Tables are Supported</h3>
 
         <p>
+          Although Orb DIDs can be created that do not have a dependency on DHTs, we also enable optional support for registering CAS resources on a DHT.
           Orb servers MAY choose to expose their CAS-based VDRs on a <a href="https://en.wikipedia.org/wiki/Distributed_hash_table">Distributed Hash Table</a> (DHT) network such as IPFS. 
-        </p>
-
-        <p>
-          TODO
+          When using a DHT, we gain the advantage of not needing to specify any Web domain to be queried for discovery.
         </p>
       </section>
 
       <section class="normative">
-        <h3>Server to Server APIs are Supported</h3>
+        <h3>Graphs Enable Propagation Discovery</h3>
 
         <p>
-          The Orb DID method treats Server to Server APIs as first-class. 
+          The Orb transaction graph that is stored into the content-addressable storage (CAS) also enables discovery of propagation properties.
+          Each node in the transaction graph includes known CAS discovery information and witness endpoints.
+          The CAS discovery information enable Orb servers to include additional endpoints when responding to WebFinger [[RFC7033]] queries.
+          The witness endpoints enable Orb servers to follow additional systems for propagation.
         </p>
 
-        <p>
-          TODO
-        </p>
       </section>
 
     </section>
@@ -218,9 +285,9 @@
         <pre>
           did-orb-format       = "did:orb:" cas-discovery-scheme ":" 
                                  min-graph-cid ":" unique-suffix
-          cas-discovery-scheme = dht-scheme / dns-scheme
+          cas-discovery-scheme = dht-scheme / web-scheme
           dht-scheme           = ( "ipfs" )
-          dns-scheme           = "dns:" reg-name
+          web-scheme           = "web:" reg-name
           reg-name             = 1*idchar                ; more constrained than [RFC3986]
           min-graph-cid        = 1*idchar
           unique-suffix        = 1*idchar
@@ -230,8 +297,8 @@
           See [[?RFC3986]] for the original definition of reg-name and [[DID-CORE]] for the definition of idchar.
         </p>
 
-        <pre class="example" title="An Orb DID that uses the DNS scheme for content discovery">
-          did:orb:dns:example.com:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        <pre class="example" title="An Orb DID that uses the Web scheme for content discovery">
+          did:orb:web:example.com:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
         </pre>
 
         <pre class="example" title="An Orb DID that uses the IPFS scheme for content discovery">
@@ -240,7 +307,7 @@
       </section>
 
     <section class="normative">
-        <h2>Operations</h2>
+        <h2>Client-to-Server Operations</h2>
 
         <p>
         </p>
@@ -300,21 +367,59 @@
             <p>
             </p>
         </section>
+
+        <section class="normative">
+          <h3>Checkpoint Operation</h3>
+
+          <p>
+          </p>
+      </section>
     </section>
 
     <section class="normative">
-        <h2>Node Interconnections</h2>
+      <h2>Witness Ledger</h2>
 
-        <p>
-        </p>
+      <p>
+      </p>
     </section>
 
     <section class="normative">
-        <h2>Witnesses</h2>
+        <h2>Server-to-Server APIs</h2>
 
         <p>
         </p>
-    </section>
+
+        <section class="normative">
+          <h3>ActivityPub</h3>
+
+          <p>
+          </p>
+        </section>
+
+        <section class="normative">
+          <h3>WebFinger</h3>
+
+          <p>
+          </p>
+        </section>
+
+        <section class="normative">
+          <h3>Content Addressable Storage</h3>
+
+          <p>
+          </p>
+        </section>
+
+        <section class="normative">
+          <h3>Distributed Hash Table</h3>
+
+          <p class="issue" title="An Orb DHT profile may be considered in the future">
+            We currently enable usage of the IPFS DHT.
+            In the future, we may want to additionally consider an Orb-specific profile to limit usage to VDRs.
+          </p>
+        </section>
+
+      </section>
 
     <section class="informative">
         <h2>Security Considerations</h2>
