@@ -169,51 +169,66 @@
       </section>
 
       <section class="normative">
-        <h3>Witnesses and Checkpoints Resolve Forks</h3>
+        <h3>Witnesses Resolve Forks</h3>
 
         <p>
           The Orb method relies on decentralized federation, gossip and CAS replication mechanisms to propagate
           the VDR among servers. The self certifying nature of Orb DIDs enables confidence in the DID validity without the need
-          for network consensus, except in cases of <a href="https://identity.foundation/sidetree/spec/#late-publishing">late publishing</a>
-          or due to resolver servers not following sufficient propagation sources. As noted in the Sidetree specification, late publishing
-          forks are caused by the DID Controller's secrets being used - "DID owners can create forks within their own DID state history" - rather
-          than being an artifact of consensus mechanisms.
-          Resolver systems choose the first published fork and we use checkpoints and witness ledgers to increase confidence in determining the relative timing.
+          for network consensus. As the DID controller is fully responsible the changes to the DIDs, they can create a new branch
+          in their changes even after time has passed.
+          This situation is called <a href="https://identity.foundation/sidetree/spec/#late-publishing">late publishing</a>.
+          The resolver systems require a mechanism to decide which branch should be used to represent the current DID state.
+          It is also beneficial to create rules that enable a consistent viewpoint of the active branch among interconnected Orb servers.         
+          Resolver systems use rules to determine the <i>first published fork</i> and use observations from Witness systems to assist in that decision.
         </p>
 
         <p>
-          In the absence of Witness ledgers, we start with a simple rule: the first fork of a DID observed by an Orb server is the first published fork
+          In the absence of Witnesses, we start with a simple rule: the first fork of a DID observed by an Orb server is the first published fork
           for that DID <i>from that server's point of view</i>. As Orb servers become increasingly interconnected, batches are gossiped between
           the Orb servers. Each server that forwards a batch includes a signed timestamp of when they observed the batch. The Orb Server MAY
-          designate some of the other Orb servers as <i>trusted</i>. These trusted servers are then used to determine relative timing between two batches.
-          In the case that a majority viewpoint of itself and the other <i>trusted</i> Orb servers, that majority viewpoint will be used to
+          designate some of the other Orb servers as <i>trusted</i>. These trusted servers are then used to determine relative timing between batches.
+          In the case that a majority viewpoint of itself and the other <i>trusted</i> Orb servers exists, that majority viewpoint will be used to
           determine the relative timing of the batches. From the relative timing of the batches, we also resolve the relative timing of the fork in the DID.
-          An Orb server does not wait for consensus - its viewpoint may change over time in these situations.
+          An Orb server does not wait for consensus - its viewpoint may evenutally converge to a majority view, over time, in these situations.
+        </p>
+       
+        <p>
+          Rules exist to resolve the active branch so that Orb servers can consistently resolve the DID controller's intended and current DID document. 
+          To mitigate against initial divergences, we also introduce the Witness role to observe a transaction prior to propagation.
+          The Orb transaction writer <i>preannounces</i> the existence of an Orb transaction by submitting it to a Witness.
+          A Witness creates a proof that they observed an Orb transaction at a certain time.
+          Witnesses have the capability to provide timestamping and also host a Witness Ledger to provide relative ordering between merged sets of Orb Transactions.
         </p>
 
         <p>
-          Although Orb Servers decideb who to designate as trusted, it is also important that their behavior can be monitored.
+          Although Orb Servers decide who to designate as trusted, it is also important that their behavior can be monitored.
           We use a Witness ledger as the mechanism for monitoring behavior - if inconsistencies are detected, other systems can adjust their viewpoint
           for trustworthiness.
-          A Witness ledger is responsible for recording individual Orb transactions, providing a proof
-          that can be embedded within an Orb transaction, and providing an API that exposes their ledger.
-          A Witness ledger is not responsible for maintaining the graph structure nor is it responsible for
-          maintaining a complete history of Orb transactions.
-          We structure witnesses ledgers in a similar manner to certificate transparency [[RFC6962]],
-          as append-only Merkle Trees. An Orb server is monitorable by exposing a Witness ledger API.
+          A Witness ledger is responsible for recording individual Orb transactions, providing signed transaction timestamps
+          that can be embedded within a propagated Orb transaction, providing ledger consistency proofs, and providing an API that exposes their ledger.
+          A Witness ledger is not responsible for maintaining the Orb transaction graph structure nor is it responsible for maintaining a complete history of Orb transactions.
+          An Orb server is monitorable by exposing a Witness ledger API.
         </p>
 
         <p>
-          When an Orb server creates a transaction, the server MAY request other Orb servers to include the transaction into their
-          Witness ledger and receive back a proof. The transaction and Witness proofs are then written into the CAS and propagated.
-          When these proofs originate from servers that are designated as <i>trusted</i>, their timing information is immediately applied
-          when forming an Orb server's viewpoint of timing.
+          We structure witnesses ledgers in a similar manner to certificate transparency [[RFC6962]], as append-only Merkle Trees with proof capabilities.
+          A Witness ledger promises to include a submitted Orb transaction within a time period known as the Maximum Merge Delay (MMD).
+          Once the ledger merges a set of Orb transactions into the Merkle Tree, a Signed Tree Head (STH) is produced.
+          The STH (and associated Merkle Proofs) is used to validate consistency between older and newer ledger revisions.
         </p>
-        
+
         <p>
-          A fork can also be explicitly resolved when the DID controller publishes a <i>checkpoint</i>,
-          as an operation that is included into a propagated <a href="https://identity.foundation/sidetree/spec/#core-index-file">Sidetree core index</a>.
-          The checkpoint may reference multiple forks and explicitly choose one of them.
+          When an Orb server creates a transaction, the server MAY request other Orb servers (as Witnesses) to include the transaction into their Witness ledger.
+          The Orb server <i>preannounces</i> a transaction to Witnesses after preparing and writing the Sidetree CAS objects.
+          The transaction announcement is then sent to Witnesses for validation and inclusion by the Witnesses.
+          Each witnesses validates the Orb transaction structure and that it was issued within an acceptable delta of their current time.
+          Witnesses MAY also validate that the Orb transaction originates from a known server that is acceptable to their policy.         
+          Upon successful validation, each witness returns a signed transaction timestamp and a promise to include the Orb transaction into their Ledger.
+          The Orb transaction (combined with the signed transaction timestamps) is then written into the CAS and propagated.
+          When an Orb Server receives a propagated transaction, they MUST invalidate each Sidetree operation that has a JSON Web Token (JWT) [[RFC7519]] 
+          "issued at" (iat) claim that is not within an acceptable delta of the Orb transaction's timestamp.
+          When these proofs originate from <i>trusted</i> servers, their timing information is immediately applied after recieving an Orb transaction propagation.
+          An Orb server that receives witnessed transactions from trusted servers likely holds the majority timing view immediately in these situations.
         </p>
       </section>
 
@@ -221,8 +236,8 @@
         <h3>Witnesses Propagate for a Suffix</h3>
         <p>
           As Orb relies on gossip replication, it is possible for a resolver system to miss transactions originating from other servers that they do not follow.
-          To mitigate this issue for a particular DID, we allow the DID controller to specify a policy.
-          The policy states the Orb server(s) that MUST be used as witnesses for batches that the DID is included within.
+          To mitigate this issue for a particular DID, we allow the DID controller to specify a witness policy.
+          This policy contains a set of witnesses that MUST be used when an Orb transaction includes changes to the associated DID.
           The Writer server ensures that, according to the DID's policy, a sufficient number of these server(s) are also acceptable as Witnesses to the Writer server.
           If the DID's policy is unacceptable to the Writer server, the operation MUST be rejected and not included into the Orb transaction. The
           DID policy ensures that the Resolver Servers can determine if they have the latest propagations and that the DID controller can use any
