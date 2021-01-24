@@ -102,6 +102,34 @@
     <section class="normative">
       <h2 id="format">Concepts</h2>
 
+      <p>
+        Orb uses a propagation model where servers announce transactions to other servers that are following them.
+        In general, <i>Orb Servers</i> have the capability to propagate transactions and replicate Orb 
+        <a href="https://www.w3.org/TR/did-core/#dfn-verifiable-data-registry"> Verifiable Data Registries</a> (VDRs).
+        Beyond propagation and replication, there are three primary <i>Orb Server</i> roles in the transaction flow:
+      </p>
+      
+      <ul>
+        <li>Writer: Accepts operations from DID controllers to update their DIDs, batches operations, and creates an Orb transaction from each batch.</li>
+        <li>Witness: Provides decentralized timestamping and partial ledger histories for Orb transactions. Accepts <i>preannouncements</i> of Orb transactions from Writers.</li>
+        <li>Resolver: Responds to Requesting Party (RP) requests for DID resolution.</li>
+      </ul>
+
+      <figure>
+        <img src="diagrams/flow-model.svg" style="max-width: 50%;"/>
+        <figcaption>
+          Orb transaction propagation model
+        </figcaption>
+      </figure>
+
+      <p class="issue" title="Operations, transaction, and witness ledgers">
+        TODO: diagram and description relating DID operations to Orb transactions and witness ledgers.
+      </p>
+
+      <p class="issue" title="Discovery, replication, monitoring">
+        TODO: diagram and description for discovery, replication, monitoring, and DHTs.
+      </p>
+
       <section class="normative">
         <h3>Self Certifying Decentralized Identifiers</h3>
 
@@ -169,7 +197,7 @@
       </section>
 
       <section class="normative">
-        <h3>Witnesses Resolve Forks</h3>
+        <h3>Witnesses Resolve Late Publishing</h3>
 
         <p>
           The Orb method relies on decentralized federation, gossip and CAS replication mechanisms to propagate
@@ -201,7 +229,7 @@
         </p>
 
         <p>
-          Although Orb Servers decide who to designate as trusted, it is also important that their behavior can be monitored.
+          Although each Orb Server decides who to designate as trusted, it is also important that an Orb Server's behavior can be monitored.
           We use a Witness ledger as the mechanism for monitoring behavior - if inconsistencies are detected, other systems can adjust their viewpoint
           for trustworthiness.
           A Witness ledger is responsible for recording individual Orb transactions, providing signed transaction timestamps
@@ -215,6 +243,14 @@
           A Witness ledger promises to include a submitted Orb transaction within a time period known as the Maximum Merge Delay (MMD).
           Once the ledger merges a set of Orb transactions into the Merkle Tree, a Signed Tree Head (STH) is produced.
           The STH (and associated Merkle Proofs) is used to validate consistency between older and newer ledger revisions.
+        </p>
+
+        <p class="issue" title="human time and ledger time">
+          TODO: discussion about:
+            <br>(1) Avoiding stale operations in the first place (try to meet the user's original intention) by using "human" time that is validated by writers and witnesses prior to propagation.
+            <br>(2) Relative ordering is provided by ledger based on Tree Head positioning ("ledger" time). A Witness that is behaving will have matching "human" time and "ledger" time ordering.
+            <br>(3) Servers periodically monitor the witness ledgers to ensure that signed transaction timestamps are included, that "ledger" time ordering matches "human" time ordering, and that the log is acting as append-only.
+            <br>(4) Link relative timing discussion into section about Witness Associatation to a Suffix.
         </p>
 
         <p>
@@ -242,6 +278,10 @@
           If the DID's policy is unacceptable to the Writer server, the operation MUST be rejected and not included into the Orb transaction. The
           DID policy ensures that the Resolver Servers can determine if they have the latest propagations and that the DID controller can use any
           Writer server that has mutually acceptable policies.
+        </p>
+
+        <p class="issue" title="ledger time">
+          When Witnesses are associated to a DID Suffix, Orb servers also have an additional trust signal for resolving late publishing scenarios.
         </p>
 
         <p>
@@ -319,6 +359,10 @@
         <pre class="example" title="An Orb DID that uses the IPFS scheme for content discovery">
           did:orb:ipfs:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
         </pre>
+
+        <p class="issue" title="default DHT">
+          TODO: discussion about not including a CAS discovery scheme and the possibility of a DHT profile for Orb.
+        </p>
       </section>
 
     <section class="normative">
