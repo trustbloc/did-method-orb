@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="240mm"
+   viewBox="0 0 210 240"
+   version="1.1"
+   id="svg14453"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   sodipodi:docname="branch-model.svg">
+  <defs
+     id="defs14447">
+    <marker
+       style="overflow:visible"
+       id="marker15675"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path15673" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker15547"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path15545" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstart"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path968" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstart-4"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path968-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstart-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path968-6" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="365.36605"
+     inkscape:cy="436.72081"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1252"
+     inkscape:window-height="943"
+     inkscape:window-x="177"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata14450">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffccaa;fill-rule:evenodd;stroke:#000000;stroke-width:0.137424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10-0"
+       width="44.862576"
+       height="29.862576"
+       x="90.06871"
+       y="8.0687122" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="92.511475"
+       y="17.024973"
+       id="text1672"><tspan
+         sodipodi:role="line"
+         x="92.511475"
+         y="17.024973"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan4029">DID A</tspan><tspan
+         sodipodi:role="line"
+         x="92.511475"
+         y="25.844423"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8246">Inception</tspan><tspan
+         sodipodi:role="line"
+         x="92.511475"
+         y="34.663872"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8140">Time: 100</tspan></text>
+    <rect
+       style="fill:#ffd5d5;fill-rule:evenodd;stroke:#000000;stroke-width:0.137424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10-0-8"
+       width="44.862576"
+       height="29.862577"
+       x="155.06863"
+       y="8.0687122" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="159.62096"
+       y="16.697372"
+       id="text1672-1"><tspan
+         sodipodi:role="line"
+         x="159.62096"
+         y="16.697372"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan4029-3">DID B</tspan><tspan
+         sodipodi:role="line"
+         x="159.62096"
+         y="25.516823"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8246-6">Inception</tspan><tspan
+         sodipodi:role="line"
+         x="159.62096"
+         y="34.336273"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8140-9">Time: 90</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.8, 2.4;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 0,44.75237 c 209.39881,0 210.91071,0.755951 210.91071,0.755951 l -0.75595,-0.755951"
+       id="path14522" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="1"
+       y="13.304762"
+       id="text15087"><tspan
+         sodipodi:role="line"
+         x="1"
+         y="13.304762"
+         style="stroke-width:0.264583"
+         id="tspan15089">Txn Time: 105</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="22.124212"
+         style="stroke-width:0.264583"
+         id="tspan15093">Witness A Time: 110</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="30.943663"
+         style="stroke-width:0.264583"
+         id="tspan15174">Witness B Time: 109</tspan></text>
+    <rect
+       style="fill:#ffccaa;fill-rule:evenodd;stroke:#000000;stroke-width:0.137424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10-0-3"
+       width="44.862576"
+       height="29.862577"
+       x="90.068718"
+       y="53.06871" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="93.494164"
+       y="62.741043"
+       id="text1672-3"><tspan
+         sodipodi:role="line"
+         x="93.494164"
+         y="62.741043"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan4029-7">DID A</tspan><tspan
+         sodipodi:role="line"
+         x="93.494164"
+         y="71.560493"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8246-1">1</tspan><tspan
+         sodipodi:role="line"
+         x="93.494164"
+         y="80.379944"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8140-4">Time: 1000</tspan></text>
+    <rect
+       style="fill:#ffd5d5;fill-rule:evenodd;stroke:#000000;stroke-width:0.137424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10-0-8-1"
+       width="44.862576"
+       height="29.862577"
+       x="155.06863"
+       y="53.06871" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="159.53247"
+       y="62.186657"
+       id="text1672-1-7"><tspan
+         sodipodi:role="line"
+         x="159.53247"
+         y="62.186657"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan4029-3-1">DID B</tspan><tspan
+         sodipodi:role="line"
+         x="159.53247"
+         y="71.006104"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8246-6-2">1</tspan><tspan
+         sodipodi:role="line"
+         x="159.53247"
+         y="79.825554"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8140-9-3">Time: 95</tspan></text>
+    <path
+       style="fill:#ff0000;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 155.06874,82.931287 c 44.86258,-29.862578 44.86258,-29.862578 44.86258,-29.862578 v 0"
+       id="path15149" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 199.93132,82.931287 C 155.06874,53.068709 155.06874,53.068709 155.06874,53.068709"
+       id="path15151" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="1"
+       y="62.409382"
+       id="text15087-1"><tspan
+         sodipodi:role="line"
+         x="1"
+         y="62.409382"
+         style="stroke-width:0.264583"
+         id="tspan15089-0">Txn Time: 1005</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="71.228828"
+         style="stroke-width:0.264583"
+         id="tspan15093-7">Witness A Time: 1006</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="80.048279"
+         style="stroke-width:0.264583"
+         id="tspan15283">DID B op invalid (stale)</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Lstart)"
+       d="m 112.53912,52.916666 c 0,-15.119048 0,-15.119048 0,-15.119048"
+       id="path15178" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Lstart-4)"
+       d="m 176.60162,52.506925 c 0,-15.119048 0,-15.119048 0,-15.119048"
+       id="path15178-7" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.799999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.799999, 2.4;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 4.5585412e-5,91.815468 C 209.3992,91.815468 210.9111,92.571415 210.9111,92.571415 l -0.75595,-0.755947"
+       id="path14522-8" />
+    <rect
+       style="fill:#ffccaa;fill-rule:evenodd;stroke:#000000;stroke-width:0.137424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10-0-3-9"
+       width="44.862576"
+       height="29.862577"
+       x="90.06871"
+       y="99.952049" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="93.494156"
+       y="109.62438"
+       id="text1672-3-6"><tspan
+         sodipodi:role="line"
+         x="93.494156"
+         y="109.62438"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan4029-7-7">DID A</tspan><tspan
+         sodipodi:role="line"
+         x="93.494156"
+         y="118.44383"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8246-1-9">2a</tspan><tspan
+         sodipodi:role="line"
+         x="93.494156"
+         y="127.26328"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8140-4-1">Time: 2000</tspan></text>
+    <rect
+       style="fill:#ffccaa;fill-rule:evenodd;stroke:#000000;stroke-width:0.137424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10-0-3-9-5"
+       width="44.862576"
+       height="29.862577"
+       x="155.06871"
+       y="148.10593" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="158.49416"
+       y="157.77815"
+       id="text1672-3-6-0"><tspan
+         sodipodi:role="line"
+         x="158.49416"
+         y="157.77815"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan4029-7-7-5">DID A</tspan><tspan
+         sodipodi:role="line"
+         x="158.49416"
+         y="166.5976"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8246-1-9-5">2b</tspan><tspan
+         sodipodi:role="line"
+         x="158.49416"
+         y="175.41705"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8140-4-1-7">Time: 2000</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="1"
+       y="108.06777"
+       id="text15087-1-9"><tspan
+         sodipodi:role="line"
+         x="1"
+         y="108.06777"
+         style="stroke-width:0.264583"
+         id="tspan15089-0-7">Txn Time: 2005</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="116.88722"
+         style="stroke-width:0.264583"
+         id="tspan15093-7-1">Witness A Time: 2006</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="125.70667"
+         style="stroke-width:0.264583"
+         id="tspan15623" /><tspan
+         sodipodi:role="line"
+         x="1"
+         y="134.52612"
+         style="stroke-width:0.264583"
+         id="tspan15283-4" /></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.799999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.799999, 2.4;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 4.5585577e-5,141.02793 C 209.39927,141.02793 210.91117,141.78388 210.91117,141.78388 l -0.75595,-0.75595"
+       id="path14522-8-1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Lstart-5)"
+       d="m 112.53912,98.846806 c 0,-15.119048 0,-15.119048 0,-15.119048"
+       id="path15178-5" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker15547)"
+       d="m 175.75893,148.16666 c 0,-59.720234 0,-59.720234 0,-59.720234"
+       id="path15543" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 175.75893,88.446424 c -63.5,2e-6 -63.21981,-4.718667 -63.21981,-4.718667"
+       id="path15597" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="1"
+       y="160.90884"
+       id="text15087-1-9-4"><tspan
+         sodipodi:role="line"
+         x="1"
+         y="160.90884"
+         style="stroke-width:0.264583"
+         id="tspan15089-0-7-1">Txn Time: 2005</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="169.72829"
+         style="stroke-width:0.264583"
+         id="tspan15093-7-1-9">Witness A Time: 2050</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="178.54774"
+         style="stroke-width:0.264583"
+         id="tspan15283-4-4">DID A op invalid (branch)</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 155.06871,177.9685 c 44.86258,-29.86258 44.86258,-29.86258 44.86258,-29.86258"
+       id="path15625" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 199.93129,177.9685 C 155.06871,148.10592 155.06871,148.10592 155.06871,148.10592"
+       id="path15627" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.799999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.799999, 2.4;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 4.5585577e-5,192.43278 C 209.39928,192.43278 210.91118,193.18873 210.91118,193.18873 l -0.75595,-0.75595"
+       id="path14522-8-1-8" />
+    <rect
+       style="fill:#ffccaa;fill-rule:evenodd;stroke:#000000;stroke-width:0.137424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10-0-3-9-4"
+       width="44.862576"
+       height="29.862577"
+       x="90.06871"
+       y="204.29489" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="93.494156"
+       y="213.96722"
+       id="text1672-3-6-2"><tspan
+         sodipodi:role="line"
+         x="93.494156"
+         y="213.96722"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan4029-7-7-8">DID A</tspan><tspan
+         sodipodi:role="line"
+         x="93.494156"
+         y="222.78667"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8246-1-9-1">3</tspan><tspan
+         sodipodi:role="line"
+         x="93.494156"
+         y="231.60612"
+         style="font-size:7.05556px;stroke-width:0.264583"
+         id="tspan8140-4-1-2">Time: 5000</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#marker15675)"
+       d="m 111.125,204.10714 c 0,-73.32738 0,-73.32738 0,-73.32738"
+       id="path15671" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="1"
+       y="210.57605"
+       id="text15087-1-9-3"><tspan
+         sodipodi:role="line"
+         x="1"
+         y="210.57605"
+         style="stroke-width:0.264583"
+         id="tspan15089-0-7-5">Txn Time: 5004</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="219.39549"
+         style="stroke-width:0.264583"
+         id="tspan15093-7-1-4">Witness A Time: 5005</tspan><tspan
+         sodipodi:role="line"
+         x="1"
+         y="228.21495"
+         style="stroke-width:0.264583"
+         id="tspan15623-7" /><tspan
+         sodipodi:role="line"
+         x="1"
+         y="237.03439"
+         style="stroke-width:0.264583"
+         id="tspan15283-4-46" /></text>
+  </g>
+</svg>
