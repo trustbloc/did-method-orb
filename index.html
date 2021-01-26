@@ -597,25 +597,273 @@
         <h2>Security Considerations</h2>
 
         <p>
+          Security considerations are provided in conformance with [[RFC3552]] section 5 and [[DID-CORE]].
         </p>
+
+        <p>
+          As Orb is an extension of [[SIDETREE]], we inherit the security properties of <i>self certifying</i> DIDs and the Sidetree operation chains:
+        </p>
+
+        <ul>
+          <li>Orb DIDs are unique since the Unique Suffix is bound to the DID's initial state including inception keys.</li>
+          <li>DID operations that modify the DID's state are authenticated and integrity protected by JSON Web Signatures [[RFC7515]] and the [[SIDETREE]] commitment scheme.</li>
+          <li>Update and recovery private keys (for signing operations) are to be held secret.</li>
+          <li>Commitment keys are to be held secret prior to revealing in the subsequent operation.</li>
+        </ul>
+
+        <p>
+          As Orb is a DID method based on gossip propagation, each Orb Server holds a subset of the overall transaction graph.
+        </p>
+
+        <ul>
+          <li>Orb servers become aware of larger number of transactions announcements based on the number of other Servers they follow.</li>
+          <li>
+            Some Orb servers may gain <i>super node</i> characteristics when they follow and replicate large portions of the graph.
+            Systems that follow these highly connected nodes also receive larger number of announcements.
+          </li>
+          <li>As the network is decentralized, Orb servers are recommended to replicate the graph structures and files that they depend upon.</li>
+          <li>
+            As with Sidetree, some Orb servers may choose to act as <i>light nodes</i> where files are retrieved on-demand to conserve storage.
+            These nodes may lose access to files if they become unavailable in the network.
+          </li>
+          <li>
+            An Orb server may request the latest transaction for a DID from their associated Witness to determine if they are missing the latest parts of the graph.
+            Different Orb servers have different confidence levels on holding the most recent updates based on the Orb servers they are following and Witnesses 
+            they are monitoring.
+          </li>
+        </ul>
+
+        <p>
+          The following table summarizes the security considerations required by [[RFC3552]].
+        </p>
+
+        <table class="simple">
+          <thead>
+            <tr>
+              <th>Attack</th>
+              <th>In-Scope</th>
+              <th>Susceptible</th>
+              <th>Mitigations and Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Eavesdropping</td>
+              <td>No</td>
+              <td>No</td>
+              <td>
+                <ul>
+                  <li>Eavesdropping attacks are not applicable since the VDR is open by design.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Replay</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>
+                <ul>
+                  <li>
+                    Each Orb transaction represents a unique node in the transaction graph.
+                    As transactions are propagated in a gossip manner, servers should de-duplicate and not
+                    announce transactions multiple times to its followers.
+                  </li>
+                  <li>
+                    If a transaction is received multiple times by an Orb server, the Orb server is not affected
+                    as transactions are simply announcements of immutable operations.
+                    Duplicated transactions have no effect and are ignored.
+                  </li>
+                  <li>
+                    The Orb specification contains rules for choosing one active branch in the DID operation chain.
+                    Duplicated operations are detected by their position in the Sidetree commit/reveal chain.
+                    As Orb Servers only choose one active branch for each DID, duplicated operations have no effect and are ignored.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Message Insertion</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>
+                <ul>
+                  <li>
+                    Orb transactions contain immutable references to their parent transactions.
+                    Inserted messages have no effect and are ignored.
+                  </li>
+                  <li>
+                    DID operation are chained using the Sidetree commit/reveal scheme.
+                    Inserted messages have no effect and are ignored.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Deletion</td>
+              <td>Yes</td>
+              <td>Mitigated</td>
+              <td>
+                <ul>
+                  <li>
+                    The Orb VDR is replicable across Orb Servers and CAS networks.
+                    However, if all copies of a VDR object are deleted, the associated DIDs become unresolvable.
+                  </li>
+                  <li>
+                    Orb servers should use an appropriate backup strategy and replicate VDR objects from the rest of the ecosystem.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Modification</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>
+                <ul>
+                  <li>
+                    VDR objects are stored in content-addressable storage and are immutable by design.
+                  </li>
+                  <li>
+                    The DID operation chain is tamper-resistant as it leverages the Sidetree commit/reveal scheme and signed operations.
+                  </li>
+                  <li>
+                    As we anticipate that Orb Servers leverage caches to reduce processing burdens, those servers and caches should be appropriately secured.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Man-in-the-Middle</td>
+              <td>Yes</td>
+              <td>Mitigated</td>
+              <td>
+                <ul>
+                  <li>
+                    It is recommended to use TLS when calling the HTTP(S) Resolution API.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Denial of Service</td>
+              <td>Yes</td>
+              <td>Mitigated</td>
+              <td>
+                <ul>
+                  <li>
+                    An attacker may cause DoS issues by sending spam transaction announcements, in an effort to overwhelm storage and processing.
+                    It is recommended that ActivityPub messages are signed so that attacking systems can become ignored.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>            
+        </table>
     </section>
         
     <section class="informative">
       <h2>Privacy Considerations</h2>
 
-      <section class="informative">
-        <h3>Keep Personally-Identifiable Information (PII) Private</h3>
+      <p>
+        Please refer to [[DID-CORE]] <a href="https://www.w3.org/TR/did-core/#privacy-considerations">Privacy Considerations</a>.
+        The following table summarizes privacy considerations from [[RFC6973]] section 5:
+      </p>
 
-        <p>
-        </p>
-      </section>
+      <table class="simple">
+        <thead>
+          <tr>
+            <th>Threat</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Surveillance
+            </td>
+            <td>
+              Orb creates a decentralized and replicated VDR. Interconnected systems should be expected to observe DID update operations.
+              For DID resolution, the opportunities for surveillance can be mitigated where an RP is running their own highly interconnected server.
+              The usage of batches also brings advantages as operations from many DIDs become intermingled into files that are being requested.
+              A Witness Server may also have surveillance opportunities when other systems inquire for the latest transaction for a particular DID.
+              These opportunities are mitigated for highly interconnected servers that already have confidence in having the latest transactions,
+              either from propagations or from monitoring and replicating Witness ledgers. 
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Stored data compromise
+            </td>
+            <td>
+              Orb creates a decentralized and replicated VDR. Interconnected systems should be expected to observe DID update operations.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Unsolicited traffic
+            </td>
+            <td>
+              The DID controller is responsible for choosing which endpoints to include within their DIDs.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Misattribution
+            </td>
+            <td>
+              Orb uses <i>self certifying</i> DIDs - the DID controller is fully responsible for the changes to their DIDs.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Correlation
+            </td>
+            <td>
+              Orb DID Suffixes are not inherently correlatable since the Unique Suffix is bound to the DID's initial state including inception keys.
+              Please refer to [[DID-CORE]] for additional guidance.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Identification
+            </td>
+            <td>
+              Orb DID Suffixes are not inherently identifiable since the Unique Suffix is bound to the DID's initial state including inception keys.
+              Please refer to [[DID-CORE]] for additional guidance.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Secondary use
+            </td>
+            <td>
+              The DID operations applied by a DID controller map to their usage of constructing a DID document.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Disclosure
+            </td>
+            <td>
+              The DID controller is responsible for the operations applied to their DID documents.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Exclusion
+            </td>
+            <td>
+              The DID method specifies a decentralized and replicable VDR. Increasing the connections between systems 
+              and using a replicable VDR strategy mitigates against exclusion.
+            </td>
+          </tr>
+        </tbody>      
+      </table>
 
-      <section class="informative">
-        <h3>DID Correlation Risks and Pseudonymous DIDs</h3>
-
-        <p>
-        </p>
-      </section>
+      <p>
+        As Orb enables Servers to interconnect as much as they choose and is agnostic to underlying ledgers,
+        the availability of data can vary based on those choices.
+      </p>
     </section>
 
     <section id='conformance'>
