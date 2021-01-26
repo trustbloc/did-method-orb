@@ -19,6 +19,12 @@
             href: "https://identity.foundation/sidetree/spec/",
             publisher: "Decentralized Identity Foundation",
             status: "Editor’s Draft"
+          },
+          DIDRESOLUTION: {
+            title: "Decentralized Identifier Resolution (DID Resolution)",
+            href: "https://w3c-ccg.github.io/did-resolution/",
+            publisher: "W3C CCG",
+            status: "Draft Community Group Report"
           }
         }
       };
@@ -100,7 +106,7 @@
     </section>
 
     <section class="normative">
-      <h2 id="format">Concepts</h2>
+      <h2>Concepts</h2>
 
       <p>
         Orb uses a propagation model where servers announce transactions to other servers that are following them.
@@ -411,12 +417,19 @@
         <h2>Client-to-Server Operations</h2>
 
         <p>
+          The Orb DID method extends the operations specified in the [[SIDETREE]] specification.
         </p>
 
         <section class="normative">
             <h3>Create</h3>
 
             <p>
+              An Orb DID is created by submitting a <i>create</i> to the operations endpoint of an Orb Server,
+              as specified in <a href="https://identity.foundation/sidetree/spec/#create">Sidetree</a>.
+            </p>
+
+            <p>
+              Detailed steps are specified in the <a href="https://identity.foundation/sidetree/api/#create">Sidetree API</a>.
             </p>
         </section>
 
@@ -424,6 +437,11 @@
             <h3>Read</h3>
 
             <p>
+              An Orb Server exposes a DID resolution API as defined in [[DID-CORE]] using the HTTP(S) Binding specified by [[DIDRESOLUTION]].
+            </p>
+
+            <p>
+              Detailed steps and additional method metadata properties are specified in the <a href="https://identity.foundation/sidetree/api/#sidetree-resolution">Sidetree API</a>.
             </p>
         </section>
 
@@ -431,14 +449,60 @@
             <h3>Update</h3>
 
             <p>
+              An Orb DID is created by submitting an <i>update</i> to the operations endpoint of an Orb Server,
+              as specified in <a href="https://identity.foundation/sidetree/spec/#update">Sidetree</a>.
             </p>
+
+            <p>
+              Detailed steps are specified in the <a href="https://identity.foundation/sidetree/api/#update">Sidetree API</a>.
+            </p>
+        </section>
+
+        <section class="normative">
+          <h3>Recover</h3>
+
+          <p>
+            An Orb DID is recovered by submitting a <i>recover</i> to the operations endpoint of an Orb Server,
+            as specified in <a href="https://identity.foundation/sidetree/spec/#recover">Sidetree</a>.
+          </p>
+
+          <p>
+            Detailed steps are specified in the <a href="https://identity.foundation/sidetree/api/#recover">Sidetree API</a>.
+          </p>
         </section>
 
         <section class="normative">
             <h3>Deactivate</h3>
 
             <p>
+              An Orb DID is deactivated by submitting a <i>deactivate</i> to the operations endpoint of an Orb Server,
+              as specified in <a href="https://identity.foundation/sidetree/spec/#deactivate">Sidetree</a>.
             </p>
+
+            <p>
+              Detailed steps are specified in the <a href="https://identity.foundation/sidetree/api/#deactivate">Sidetree API</a>.
+            </p>
+        </section>
+
+        <section class="normative">
+          <h3>DID Controller policies</h3>
+
+          <p class="issue" title="Setting a witness">
+            TODO: In a followup revision, we will specify a Sidetree operation for associating a Witness to a DID.
+          </p>
+
+          <p class="issue" title="Stale operations">
+            TODO: In a followup revision, we will specify setting the issuance date of an operation to indicate staleness.
+          </p>
+        </section>
+
+        <section class="normative">
+          <h3>Endpoint Discovery</h3>
+
+          <p class="issue" title="Equivalent servers policy">
+            TODO: Like in did:trustbloc <a href="https://github.com/trustbloc/trustbloc-did-method/blob/main/docs/spec/trustbloc-did-method.md#endpoint-discovery">Endpoint Discovery</a>, it is useful to be able to signal that multiple servers can be treated as the same,
+            if the RP follows the policy on how many to query.
+          </p>
         </section>
     </section>
 
@@ -478,13 +542,6 @@
     </section>
 
     <section class="normative">
-      <h2>Witness Ledger</h2>
-
-      <p>
-      </p>
-    </section>
-
-    <section class="normative">
         <h2>Server-to-Server APIs</h2>
 
         <p>
@@ -512,6 +569,13 @@
         </section>
 
         <section class="normative">
+          <h3>Witness</h3>
+
+          <p>
+          </p>
+        </section>
+
+        <section class="normative">
           <h3>Distributed Hash Table</h3>
 
           <p class="issue" title="An Orb DHT profile may be considered in the future">
@@ -522,6 +586,13 @@
 
       </section>
 
+    <section class="normative">
+      <h2>Witness Ledger</h2>
+
+      <p>
+      </p>
+    </section>
+      
     <section class="informative">
         <h2>Security Considerations</h2>
 
