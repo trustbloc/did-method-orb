@@ -507,51 +507,152 @@
     </section>
 
     <section class="normative">
-        <h2>Transaction Graph</h2>
-
-        <p>
-        </p>
-
-        <section class="normative">
-            <h3>Content Addressable Storage</h3>
-
-            <p>
-            </p>
-        </section>
-
-        <section class="normative">
-            <h3>Transaction</h3>
-
-            <p>
-            </p>
-        </section>
-
-        <section class="normative">
-            <h3>Sidetree Protocol</h3>
-
-            <p>
-            </p>
-        </section>
-
-        <section class="normative">
-          <h3>Checkpoint Operation</h3>
-
-          <p>
-          </p>
-      </section>
-    </section>
-
-    <section class="normative">
         <h2>Server-to-Server APIs</h2>
 
         <p>
+          An Orb Server exposes APIs for propagation, content-addressable storage, discovery, and witnessing.
         </p>
+
+        <section class="normative">
+          <h3>Vocabulary</h3>
+
+          <section class="normative">
+            <h4>OrbTransaction</h4>
+
+            <pre class="example highlight" title="Orb transaction">
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams",
+                  "https://trustbloc.github.io/context/orb"
+                ],
+                "id": "https://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "type": "OrbTransaction",
+                "cid": "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "node": {
+                  "published": "2021-01-27T09:30:10-06:00",
+                  "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                  "namespace": "orb",
+                  "version": "1",
+                  "previousTransactions": {
+                    "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
+                    "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
+                  }
+                }
+              }
+            </pre>
+
+          </section>
+
+        </section>
 
         <section class="normative">
           <h3>ActivityPub</h3>
 
-          <p>
-          </p>
+          <p>This section defines a minimal profile of [[ACTIVITYPUB]] that Orb Servers implement to participate in propagation flows.</p>
+
+          <section class="normative">
+            <h4>Actor (Discovery)</h4>
+  
+            <p>
+              An <i>Actor</i> exposed by an Orb Server is capable of participating in propagation flows.
+              ActivityPub endpoints are retrieved by performing an HTTP GET to the Actor endpoint.
+              The Actor endpoint returns an <a href="https://www.w3.org/TR/activitypub/#actor-objects">Actor object</a>.
+            </p>
+
+            <pre class="example highlight" title="Actor retrieval">
+              GET /services/orb HTTP/1.1
+              Host: alice.example.com
+              Accept: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+              Accept-Encoding: gzip, deflate
+            </pre>
+
+            When the service profile exists, an HTTP 200 status code is returned.
+
+            <pre class="example highlight" title="Successful Actor response">
+              HTTP/1.1 200 OK
+              Date: Wed, 27 Jan 2021 21:57:25 GMT
+              Connection: keep-alive
+
+              {
+                "@context": [
+                "https://www.w3.org/ns/activitystreams",
+                "https://w3id.org/security/v1"
+                ],
+                "id": "https://alice.example.com/services/orb",
+                "type": "Service",
+                "publicKey": {
+                  "id": "https://alice.example.com/services/orb#main-key",
+                  "owner": "https://alice.example.com/services/orb",
+                  "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhki....."
+                },
+                "inbox": "https://alice.example.com/services/orb/inbox",
+                "outbox": "https://alice.example.com/services/orb/outbox",
+                "followers": "https://alice.example.com/services/orb/followers",
+                "following": "https://alice.example.com/services/orb/following"                
+              }
+            </pre>
+
+            <p class="issue" title="DID for service">
+              TODO: Review handling of publicKey.
+            </p>
+
+          </section>
+
+          <section class="normative">
+            <h4>Inbox</h4>
+  
+            <p>
+              A transaction announcement is propagated to another Orb Server by performing an HTTP POST of an <i>Announce</i> activity containing an <i>OrbTransaction</i> to its ActivityPub inbox endpoint.
+            </p>
+
+            <pre class="example highlight" title="Propagating a transaction announcement">
+              POST /services/orb/inbox HTTP/1.1
+              Host: alice.example.com
+              Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+              Accept-Encoding: gzip, deflate
+
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams",
+                  "https://trustbloc.github.io/context/orb"
+                ],
+                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "type": "Announce",
+                "actor": "https://sally.example.com/services/orb",
+                "to": [
+                  "https://sally.example.com/services/orb/followers",
+                  "https://www.w3.org/ns/activitystreams#Public"
+                ],
+                "published": "2021-01-27T09:30:10-06:00",
+                "object": {
+                  "type": "Collection",
+                  "totalItems": 1,
+                  "items": [
+                    {
+                      "id": "http://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                      "type": "OrbTransaction",
+                      "cid": "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                      "node": {
+                        "published": "2021-01-27T09:30:10-06:00",
+                        "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                        "namespace": "orb",
+                        "version": "1",
+                        "previousTransactions": {
+                          "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
+                          "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }               
+            </pre>
+
+            <p>
+              On success, HTTP status code 200 is returned.
+            </p>
+
+          </section>
         </section>
 
         <section class="normative">
@@ -566,7 +667,14 @@
 
           <p>
           </p>
-        </section>
+
+          <section class="normative">
+            <h3>Content Addressable Storage</h3>
+  
+            <p>
+            </p>
+          </section>
+         </section>
 
         <section class="normative">
           <h3>Witness</h3>
@@ -589,7 +697,8 @@
     <section class="normative">
       <h2>Witness Ledger</h2>
 
-      <p>
+      <p class="issue" title="Witness Merkle Tree">
+        TODO: In a followup revision, we will specify a witness ledger profile based on certificate transparency [[RFC6962]].
       </p>
     </section>
       
@@ -752,7 +861,7 @@
                 <ul>
                   <li>
                     An attacker may cause DoS issues by sending spam transaction announcements, in an effort to overwhelm storage and processing.
-                    It is recommended that ActivityPub messages are signed so that attacking systems can become ignored.
+                    Propagated transaction announcements are signed so that attacking systems can become ignored.
                   </li>
                 </ul>
               </td>
