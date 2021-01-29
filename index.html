@@ -25,6 +25,12 @@
             href: "https://w3c-ccg.github.io/did-resolution/",
             publisher: "W3C CCG",
             status: "Draft Community Group Report"
+          },
+          LDPROOF: {
+            title: "Linked Data Proofs 1.0",
+            href: "https://w3c-ccg.github.io/ld-proofs/",
+            publisher: "W3C CCG",
+            status: "Draft Community Group Report"
           }
         }
       };
@@ -522,21 +528,90 @@
             <pre class="example highlight" title="Orb transaction">
               {
                 "@context": [
-                  "https://www.w3.org/ns/activitystreams",
-                  "https://trustbloc.github.io/context/orb"
+                  "https://www.w3.org/2018/credentials/v1",
+                  "https://trustbloc.github.io/context/orb-v1.json",
+                  "https://w3c-ccg.github.io/lds-jws2020/contexts/lds-jws2020-v1.json"
                 ],
-                "id": "https://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
-                "type": "OrbTransaction",
-                "cid": "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
-                "node": {
-                  "published": "2021-01-27T09:30:10-06:00",
+                "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                "type": ["VerifiableCredential", "OrbTransaction"],
+                "issuer": "https://sally.example.com/services/orb",
+                "issuanceDate": "2021-01-27T09:30:10Z",
+                "credentialSubject": {
                   "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                  "namespace": "orb",
+                  "namespace": "did:orb",
                   "version": "1",
                   "previousTransactions": {
                     "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
                     "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
                   }
+                },
+                "proofChain": [{
+                  "type": "JsonWebSignature2020",
+                  "proofPurpose": "assertionMethod",
+                  "created": "2021-01-27T09:30:00Z",
+                  "verificationMethod": "did:example:abcd#key",
+                  "domain": "sally.example.com",
+                  "jws": "eyJ..."
+                },
+                {
+                  "type": "JsonWebSignature2020",
+                  "proofPurpose": "assertionMethod",
+                  "created": "2021-01-27T09:30:05Z",
+                  "verificationMethod": "did:example:abcd#key",
+                  "domain": "witness1.example.com",
+                  "jws": "eyJ..."
+                },
+                {
+                  "type": "JsonWebSignature2020",
+                  "proofPurpose": "assertionMethod",
+                  "created": "2021-01-27T09:30:06Z",
+                  "verificationMethod": "did:example:efgh#key",
+                  "domain": "witness2.example.com",
+                  "jws": "eyJ..."
+                }]                  
+              }
+            </pre>
+
+            The Orb transaction is embedded within an Activity during propagation flows.
+            The Activity includes information about the CAS.
+
+            <pre class="example highlight" title="Orb transaction wrapped in a Create Activity">
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams",
+                  "https://trustbloc.github.io/context/orb-v1.json"
+                ],
+                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "type": "Create",
+                "actor": "https://sally.example.com/services/orb",
+                "to": [
+                  "https://sally.example.com/services/orb/followers",
+                  "https://www.w3.org/ns/activitystreams#Public"
+                ],
+                "published": "2021-01-27T09:30:10Z",
+                "target": {
+                  "type": "Cas",
+                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                },
+                "object": {
+                  "@context": [
+                    "https://www.w3.org/2018/credentials/v1",
+                    "https://trustbloc.github.io/context/orb-v1.json"
+                  ],
+                  "id": "http://sally.example.com/transactions/642bab75-76a4-4b5f-98bb-794467ad5891",
+                  "type": ["VerifiableCredential", "OrbTransaction"],
+                  "issuer": "https://sally.example.com/services/orb",
+                  "issuanceDate": "2021-01-27T09:30:10Z",
+                  "credentialSubject": {
+                    "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                    "namespace": "did:orb",
+                    "version": "1",
+                    "previousTransactions": {
+                      "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
+                      "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
+                    }
+                  },
+                  "proofChain": [{}]
                 }
               }
             </pre>
@@ -599,13 +674,27 @@
           </section>
 
           <section class="normative">
-            <h4>Inbox</h4>
-  
+            <h4>Delivery</h4>
+
             <p>
-              A transaction announcement is propagated to another Orb Server by performing an HTTP POST of an <i>Announce</i> activity containing an <i>OrbTransaction</i> to its ActivityPub inbox endpoint.
+              Orb Servers use ActivityPub <a href="https://www.w3.org/TR/activitypub/#delivery">Delivery</a> mechanisms to propagate transactions and to request to follow other servers.
+              A propagation or follow request is sent by performing an HTTP POST of an activity to an Orb Server's ActivityPub inbox endpoint.
             </p>
 
-            <pre class="example highlight" title="Propagating a transaction announcement">
+            <p>
+              Orb Servers use HTTP Signatures [[HTTP-SIGNATURES]] when calling Server-to-Server APIs to create authenticated messages.
+              The Orb Transaction objects are additionally signed using JSON-LD proofs [[LDPROOF]] from both the Writer server as well as Witness servers.
+            </p>
+          </section>
+
+          <section class="normative">
+            <h4>Create Activity</h4>
+            <p>
+              An Orb Server that creates a Transaction uses an <i>Create</i> activity to propagate that knowledge to its own followers.
+              A transaction is propagated to another Orb Server by performing an HTTP POST of an <i>Create</i> activity containing an <i>OrbTransaction</i> to its ActivityPub inbox endpoint.
+            </p>
+
+            <pre class="example highlight" title="Propagating a new transaction (without an embedded graph node)">
               POST /services/orb/inbox HTTP/1.1
               Host: alice.example.com
               Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
@@ -617,35 +706,176 @@
                   "https://trustbloc.github.io/context/orb"
                 ],
                 "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "type": "Create",
+                "actor": "https://sally.example.com/services/orb",
+                "to": [
+                  "https://sally.example.com/services/orb/followers",
+                  "https://www.w3.org/ns/activitystreams#Public"
+                ],
+                "published": "2021-01-27T09:30:10Z",
+                "target": {
+                  "type": "Cas",
+                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                },
+                "object": {
+                  "id": "http://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                  "type": "OrbTransaction",
+                }
+              }
+            </pre>
+
+            <p>
+              On success, HTTP status code 200 is returned.
+            </p>
+
+            <pre class="example highlight" title="Propagating a new transaction (with an embedded graph node)">
+              POST /services/orb/inbox HTTP/1.1
+              Host: alice.example.com
+              Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+              Accept-Encoding: gzip, deflate
+
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams",
+                  "https://trustbloc.github.io/context/orb-v1.json"
+                ],
+                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "type": "Create",
+                "actor": "https://sally.example.com/services/orb",
+                "to": [
+                  "https://sally.example.com/services/orb/followers",
+                  "https://www.w3.org/ns/activitystreams#Public"
+                ],
+                "published": "2021-01-27T09:30:10Z",
+                "target": {
+                  "type": "Cas",
+                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                },
+                "object": {
+                  "@context": [
+                    "https://www.w3.org/2018/credentials/v1",
+                    "https://trustbloc.github.io/context/orb-v1.json"
+                  ],
+                  "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                  "type": ["VerifiableCredential", "OrbTransaction"],
+                  "issuer": "https://sally.example.com/services/orb",
+                  "issuanceDate": "2021-01-27T09:30:10Z",
+                  "credentialSubject": {
+                    "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                    "namespace": "did:orb",
+                    "version": "1",
+                    "previousTransactions": {
+                      "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
+                      "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
+                    }
+                  },
+                  "proofChain": [{}]
+                }
+              }
+            </pre>
+
+            <p>
+              On success, HTTP status code 200 is returned.
+            </p>            
+          </section>
+  
+          <section class="normative">
+            <h4>Announce Activity</h4>
+            <p>
+              An Orb Server that learns about a new Transaction that was created by another Orb server uses an <i>Announce</i> activity to gossip that knowledge to its own followers.
+              A transaction is forwarded to another Orb Server by performing an HTTP POST of an <i>Announce</i> activity containing an <i>OrbTransaction</i> to its ActivityPub inbox endpoint.
+            </p>
+
+            <pre class="example highlight" title="Propagating a forwarded transaction (without an embedded graph node)">
+              POST /services/orb/inbox HTTP/1.1
+              Host: alice.example.com
+              Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+              Accept-Encoding: gzip, deflate
+
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams",
+                  "https://trustbloc.github.io/context/orb-v1.json"
+                ],
+                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
                 "type": "Announce",
                 "actor": "https://sally.example.com/services/orb",
                 "to": [
                   "https://sally.example.com/services/orb/followers",
                   "https://www.w3.org/ns/activitystreams#Public"
                 ],
-                "published": "2021-01-27T09:30:10-06:00",
+                "published": "2021-01-27T09:30:10Z",
+                "target": {
+                  "type": "Cas",
+                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                },
                 "object": {
                   "type": "Collection",
                   "totalItems": 1,
                   "items": [
                     {
-                      "id": "http://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                      "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
                       "type": "OrbTransaction",
-                      "cid": "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
-                      "node": {
-                        "published": "2021-01-27T09:30:10-06:00",
+                    }
+                  ]
+                }
+              }
+            </pre>
+
+            <p>
+              On success, HTTP status code 200 is returned.
+            </p>
+
+            <pre class="example highlight" title="Propagating a forwarded transaction (with an embedded graph node)">
+              POST /services/orb/inbox HTTP/1.1
+              Host: alice.example.com
+              Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+              Accept-Encoding: gzip, deflate
+
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams",
+                  "https://trustbloc.github.io/context/orb-v1.json"
+                ],
+                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "type": "Announce",
+                "actor": "https://sally.example.com/services/orb",
+                "to": [
+                  "https://sally.example.com/services/orb/followers",
+                  "https://www.w3.org/ns/activitystreams#Public"
+                ],
+                "published": "2021-01-27T09:30:10Z",
+                "target": {
+                  "type": "Cas",
+                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                },
+                "object": {
+                  "type": "Collection",
+                  "totalItems": 1,
+                  "items": [
+                    {
+                      "@context": [
+                        "https://www.w3.org/2018/credentials/v1",
+                        "https://trustbloc.github.io/context/orb-v1.json"
+                      ],
+                      "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                      "type": ["VerifiableCredential", "OrbTransaction"],
+                      "issuer": "https://sally.example.com/services/orb",
+                      "issuanceDate": "2021-01-27T09:30:10Z",
+                      "credentialSubject": {
                         "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                        "namespace": "orb",
+                        "namespace": "did:orb",
                         "version": "1",
                         "previousTransactions": {
                           "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
                           "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
                         }
-                      }
+                      },
+                      "proofChain": [{}]
                     }
                   ]
                 }
-              }               
+              }
             </pre>
 
             <p>
@@ -653,6 +883,100 @@
             </p>
 
           </section>
+
+          <section class="normative">
+            <h4>Follow Activity</h4>
+              <p>
+                An Orb Server requests to follow another Orb Server by performing an HTTP POST of a <i>Follow</i> activity to its ActivityPub inbox endpoint.
+                Refer to <a href="https://www.w3.org/TR/activitypub/#follow-activity-inbox">ActivityPub</a> for guidance. 
+              </p>
+
+              <pre class="example highlight" title="Request to follow an Orb Server">
+                POST /services/orb/inbox HTTP/1.1
+                Host: alice.example.com
+                Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+                Accept-Encoding: gzip, deflate
+  
+                {
+                  "@context": "https://www.w3.org/ns/activitystreams",
+                  "id": "https://sally.example.com/activities/9052018f-9530-4aef-8a46-40bde9445a25",
+                  "type": "Follow",
+                  "to": "https://alice.example.com/services/orb",
+                  "actor": "https://sally.example.com/services/orb"
+                }
+              </pre>
+
+              <p>
+                On success, HTTP status code 200 is returned.
+              </p>
+          </section>
+
+          <section class="normative">
+            <h4>Accept Activity</h4>
+              <p>
+                An Orb Server accepts a Follow request by sending an HTTP POST of a <i>Accept</i> activity to the requesting Orb Server's ActivityPub inbox endpoint.
+                Refer to <a href="https://www.w3.org/TR/activitypub/#accept-activity-inbox">ActivityPub</a> for guidance. 
+              </p>
+
+              <pre class="example highlight" title="Accept follow request from an Orb Server">
+                POST /services/orb/inbox HTTP/1.1
+                Host: sally.example.com
+                Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+                Accept-Encoding: gzip, deflate
+  
+                {
+                  "@context": "https://www.w3.org/ns/activitystreams",
+                  "id": "https://alice.example.com/activities/e017e49a-6256-44a0-855d-5dc304ae67f7",
+                  "to": "https://sally.example.com/services/orb",
+                  "type": "Accept",
+                  "actor": "https://alice.example.com/services/orb",
+                  "object": {
+                      "id": "https://sally.example.com/activities/9052018f-9530-4aef-8a46-40bde9445a25",
+                      "to": "https://alice.example.com/services/orb",
+                      "type": "Follow",
+                      "actor": "https://sally.example.com/services/orb",
+                  }                  
+                }
+              </pre>
+
+              <p>
+                On success, HTTP status code 200 is returned.
+              </p>  
+          </section>
+
+          <section class="normative">
+            <h4>Reject Activity</h4>
+              <p>
+                An Orb Server rejects a Follow request by sending an HTTP POST of a <i>Reject</i> activity to the requesting Orb Server's ActivityPub inbox endpoint.
+                Refer to <a href="https://www.w3.org/TR/activitypub/#reject-activity-inbox">ActivityPub</a> for guidance. 
+              </p>
+
+              <pre class="example highlight" title="Reject follow request from an Orb Server">
+                POST /services/orb/inbox HTTP/1.1
+                Host: sally.example.com
+                Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+                Accept-Encoding: gzip, deflate
+  
+                {
+                  "@context": "https://www.w3.org/ns/activitystreams",
+                  "id": "https://alice.example.com/activities/e017e49a-6256-44a0-855d-5dc304ae67f7",
+                  "to": "https://sally.example.com/services/orb",
+                  "type": "Reject",
+                  "actor": "https://alice.example.com/services/orb",
+                  "object": {
+                      "id": "https://sally.example.com/activities/9052018f-9530-4aef-8a46-40bde9445a25",
+                      "to": "https://alice.example.com/services/orb",
+                      "type": "Follow",
+                      "actor": "https://sally.example.com/services/orb",
+                  }                  
+                }
+              </pre>
+
+              <p>
+                On success, HTTP status code 200 is returned.
+              </p>  
+          </section>
+
         </section>
 
         <section class="normative">
@@ -667,13 +991,6 @@
 
           <p>
           </p>
-
-          <section class="normative">
-            <h3>Content Addressable Storage</h3>
-  
-            <p>
-            </p>
-          </section>
          </section>
 
         <section class="normative">
