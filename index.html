@@ -508,12 +508,122 @@
         </section>
 
         <section class="normative">
-          <h3>Endpoint Discovery</h3>
+          <h3>Discovery</h3>
 
-          <p class="issue" title="Equivalent servers policy">
-            TODO: Like in did:trustbloc <a href="https://github.com/trustbloc/trustbloc-did-method/blob/main/docs/spec/trustbloc-did-method.md#endpoint-discovery">Endpoint Discovery</a>, it is useful to be able to signal that multiple servers can be treated as the same,
-            if the RP follows the policy on how many to query.
-          </p>
+          <section class="normative">
+            <h4>Domain Endpoint Discovery</h4>
+
+            <p>
+              A client discovers a domain's endpoints for DID resolution and DID operations using a .well-known scheme [[RFC8615]].
+              The domain declares its own endpoints for resolution and operations.
+            </p>
+
+            <pre class="example highlight" title="Client endpoint discovery (request)">
+              GET /.well-known/did-orb HTTP/1.1
+              Host: alice.example.com
+              Accept-Encoding: gzip, deflate
+            </pre>
+
+            When the discovery profile exists, an HTTP 200 status code is returned.
+
+            <pre class="example highlight" title="Client endpoint discovery (response)">
+              HTTP/1.1 200 OK
+              Date: Sat, 30 Jan 2021 18:31:58 GMT
+              Content-Type: application/json; charset=utf-8
+              Connection: keep-alive
+              Access-Control-Allow-Origin: *
+
+              {
+                "resolutionEndpoint": "https://alice.example.com/sidetree/0.1/identifiers",
+                "operationEndpoint": "https://alice.example.com/sidetree/0.1/operations"
+              }
+            </pre>
+          </section>
+
+          <section class="normative">
+            <h4>Shared Resolution Domain</h4>
+
+            <p>
+              A shared domain may be used to enable a group of organizations to share resolution responsibilities.
+              This model enables a resolution client to have increased confidence by validating a resolution result against multiple entities.
+              A domain is a shared domain model when it declares its linked domains and an n-of-m policy in its well-known configuration.
+              Linked domains indicate to clients that these domains have an synchronized (eventually consistent) relationship and can be used n-of-m for resolution.
+              These domains and policy are fetched using a WebFinger [[RFC7033]] query.
+              When using linked domain resolution, the client performs the following steps to obtain higher confidence in the resolution results:
+            </p>
+  
+            <ol>
+              <li>Lookup <i>n</i> from the <i>https://trustbloc.dev/ns/min-resolvers</i> property.</li>
+              <li>Choose <i>n</i> of the links from the WebFinger result.</li>
+              <li>Fetches the configurations at each chosen link using WebFinger.</li>
+              <li>Validates that each well-known configuration has the same policy for <i>n</i> and that all of the chosen links are listed in the <i>n</i> fetched configurations.</li>
+              <li>Resolve the DID at each of the <i>n</i> chosen links.</li>
+              <li>Ensure that the DID resolution result matches (other than resolver-specific metadata such as timestamps).</li>
+              <li>In case of a mismatch, additional links may need to be chosen until the client has <i>n</i> matches.</li>
+            </ol>
+  
+            <pre class="example highlight" title="Client shared domain discovery (request)">
+              GET /.well-known/did-orb HTTP/1.1
+              Host: shared.example.com
+              Accept-Encoding: gzip, deflate
+            </pre>
+  
+            When the discovery profile for the shared domain exists, an HTTP 200 status code is returned.
+  
+            <pre class="example highlight" title="Client shared domain discovery (response)">
+              HTTP/1.1 200 OK
+              Date: Sat, 30 Jan 2021 18:31:58 GMT
+              Content-Type: application/json; charset=utf-8
+              Connection: keep-alive
+              Access-Control-Allow-Origin: *
+  
+              {
+                "resolutionEndpoint": "https://shared.example.com/sidetree/0.1/identifiers",
+                "operationEndpoint": "https://shared.example.com/sidetree/0.1/operations"
+              }
+            </pre>
+
+            <pre class="example highlight" title="Client shared domain discovery (request)">
+              GET /.well-known/webfinger?resource=https%3A%2F%2Fshared.example.com%2Fsidetree%2F0.1%2Fidentifiers HTTP/1.1
+              Host: shared.example.com
+              Accept-Encoding: gzip, deflate
+            </pre>
+  
+            When the DID resolution capability exists, an HTTP 200 status code is returned.
+  
+            <pre class="example highlight" title="Client shared domain discovery (response)">
+              HTTP/1.1 200 OK
+              Date: Sat, 30 Jan 2021 18:31:58 GMT
+              Content-Type: application/jrd+json
+              Connection: keep-alive
+              Access-Control-Allow-Origin: *
+  
+              {
+                "subject": "https://shared.example.com/sidetree/0.1/identifiers",
+                "properties": {
+                  "https://trustbloc.dev/ns/min-resolvers": 2
+                },
+                "links": [
+                  {
+                    "rel": "self",
+                    "href": "https://shared.example.com/sidetree/0.1/identifiers"
+                  },
+                  {
+                    "rel": "alternate",
+                    "href": "https://charlie.example.com/sidetree/0.1/identifiers"
+                  },
+                  {
+                    "rel": "alternate",
+                    "href": "https://oscar.example.com/sidetree/0.1/identifiers"
+                  },
+                  {
+                    "rel": "alternate",
+                    "href": "https://mike.example.com/sidetree/0.1/identifiers"
+                  }
+                ]
+              }
+            </pre>            
+          </section>
         </section>
     </section>
 
@@ -638,7 +748,31 @@
         <section class="normative">
           <h3>Service Discovery</h3>
 
-          <p></p>
+          <p>
+            An Orb Server discovers a domain's endpoints for the Orb actor using a .well-known scheme [[RFC8615]].
+          </p>
+
+          <pre class="example highlight" title="Client endpoint discovery (request)">
+            GET /.well-known/did-orb HTTP/1.1
+            Host: alice.example.com
+            Accept-Encoding: gzip, deflate
+          </pre>
+
+          When the discovery profile exists, an HTTP 200 status code is returned.
+
+          <pre class="example highlight" title="Client endpoint discovery (response)">
+            HTTP/1.1 200 OK
+            Date: Sat, 30 Jan 2021 18:31:58 GMT
+            Content-Type: application/json; charset=utf-8
+            Connection: keep-alive
+            Access-Control-Allow-Origin: *
+
+            {
+              "resolutionEndpoint": "https://alice.example.com/sidetree/0.1/identifiers",
+              "operationEndpoint": "https://alice.example.com/sidetree/0.1/operations",
+              "serviceEndpoint": "https://alice.example.com/services/orb"
+            }
+          </pre>
         </section>
 
         <section class="normative">
