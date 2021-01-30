@@ -31,6 +31,11 @@
             href: "https://w3c-ccg.github.io/ld-proofs/",
             publisher: "W3C CCG",
             status: "Draft Community Group Report"
+          },
+          CID: {
+            title: "CID (Content IDentifier) Specification",
+            href: "https://github.com/multiformats/cid",
+            publisher: "Multiformats"
           }
         }
       };
@@ -523,7 +528,11 @@
           <h3>Vocabulary</h3>
 
           <section class="normative">
-            <h4>OrbTransaction</h4>
+            <h4>AnchorCredential</h4>
+
+            <p>
+              An Orb Transaction is represented as an <i>AnchorCredential</i>.
+            </p>
 
             <pre class="example highlight" title="Orb transaction">
               {
@@ -533,7 +542,10 @@
                   "https://w3c-ccg.github.io/lds-jws2020/contexts/lds-jws2020-v1.json"
                 ],
                 "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                "type": ["VerifiableCredential", "OrbTransaction"],
+                "type": [
+                  "VerifiableCredential",
+                  "AnchorCredential"
+                ],
                 "issuer": "https://sally.example.com/services/orb",
                 "issuanceDate": "2021-01-27T09:30:10Z",
                 "credentialSubject": {
@@ -599,7 +611,10 @@
                     "https://trustbloc.github.io/context/orb-v1.json"
                   ],
                   "id": "http://sally.example.com/transactions/642bab75-76a4-4b5f-98bb-794467ad5891",
-                  "type": ["VerifiableCredential", "OrbTransaction"],
+                  "type": [
+                    "VerifiableCredential",
+                    "AnchorCredential"
+                  ],
                   "issuer": "https://sally.example.com/services/orb",
                   "issuanceDate": "2021-01-27T09:30:10Z",
                   "credentialSubject": {
@@ -618,6 +633,12 @@
 
           </section>
 
+        </section>
+
+        <section class="normative">
+          <h3>Service Discovery</h3>
+
+          <p></p>
         </section>
 
         <section class="normative">
@@ -646,7 +667,9 @@
             <pre class="example highlight" title="Successful Actor response">
               HTTP/1.1 200 OK
               Date: Wed, 27 Jan 2021 21:57:25 GMT
+              Content-Type: application/jrd+json; charset=utf-8
               Connection: keep-alive
+              Access-Control-Allow-Origin: *
 
               {
                 "@context": [
@@ -691,7 +714,7 @@
             <h4>Create Activity</h4>
             <p>
               An Orb Server that creates a Transaction uses an <i>Create</i> activity to propagate that knowledge to its own followers.
-              A transaction is propagated to another Orb Server by performing an HTTP POST of an <i>Create</i> activity containing an <i>OrbTransaction</i> to its ActivityPub inbox endpoint.
+              A transaction is propagated to another Orb Server by performing an HTTP POST of an <i>Create</i> activity containing an <i>AnchorCredential</i> to its ActivityPub inbox endpoint.
             </p>
 
             <pre class="example highlight" title="Propagating a new transaction (without an embedded graph node)">
@@ -719,7 +742,7 @@
                 },
                 "object": {
                   "id": "http://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
-                  "type": "OrbTransaction",
+                  "type": "AnchorCredential",
                 }
               }
             </pre>
@@ -757,7 +780,10 @@
                     "https://trustbloc.github.io/context/orb-v1.json"
                   ],
                   "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                  "type": ["VerifiableCredential", "OrbTransaction"],
+                  "type": [
+                    "VerifiableCredential",
+                    "AnchorCredential"
+                  ],
                   "issuer": "https://sally.example.com/services/orb",
                   "issuanceDate": "2021-01-27T09:30:10Z",
                   "credentialSubject": {
@@ -783,7 +809,7 @@
             <h4>Announce Activity</h4>
             <p>
               An Orb Server that learns about a new Transaction that was created by another Orb server uses an <i>Announce</i> activity to gossip that knowledge to its own followers.
-              A transaction is forwarded to another Orb Server by performing an HTTP POST of an <i>Announce</i> activity containing an <i>OrbTransaction</i> to its ActivityPub inbox endpoint.
+              A transaction is forwarded to another Orb Server by performing an HTTP POST of an <i>Announce</i> activity containing an <i>AnchorCredential</i> to its ActivityPub inbox endpoint.
             </p>
 
             <pre class="example highlight" title="Propagating a forwarded transaction (without an embedded graph node)">
@@ -815,7 +841,7 @@
                   "items": [
                     {
                       "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                      "type": "OrbTransaction",
+                      "type": "AnchorCredential",
                     }
                   ]
                 }
@@ -859,7 +885,10 @@
                         "https://trustbloc.github.io/context/orb-v1.json"
                       ],
                       "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                      "type": ["VerifiableCredential", "OrbTransaction"],
+                      "type": [
+                        "VerifiableCredential",
+                        "AnchorCredential"
+                      ],
                       "issuer": "https://sally.example.com/services/orb",
                       "issuanceDate": "2021-01-27T09:30:10Z",
                       "credentialSubject": {
@@ -882,6 +911,9 @@
               On success, HTTP status code 200 is returned.
             </p>
 
+            <p class="issue" title="Target type">
+              We should review the above examples for the appropriate target type.
+            </p>      
           </section>
 
           <section class="normative">
@@ -980,20 +1012,6 @@
         </section>
 
         <section class="normative">
-          <h3>WebFinger</h3>
-
-          <p>
-          </p>
-        </section>
-
-        <section class="normative">
-          <h3>Content Addressable Storage</h3>
-
-          <p>
-          </p>
-         </section>
-
-        <section class="normative">
           <h3>Witness</h3>
 
           <p>
@@ -1001,12 +1019,165 @@
         </section>
 
         <section class="normative">
-          <h3>Distributed Hash Table</h3>
+          <h3>WebFinger</h3>
 
-          <p class="issue" title="An Orb DHT profile may be considered in the future">
-            We currently enable usage of the IPFS DHT.
-            In the future, we may want to additionally consider an Orb-specific profile to limit usage to VDRs.
+          <p>
+            WebFinger [[RFC7033]] is used to discover endpoints for Orb service and resource URIs.
           </p>
+
+          <p>The following example retrieves endpoints for a service named orb at alice.example.com.</p>
+
+          <pre class="example highlight" title="Discover endpoints for an Orb service (request).">
+            GET /.well-known/webfinger?resource=https%3A%2F%2Falice.example.com%2Fservices%2Forb HTTP/1.1
+            Host: alice.example.com
+            Accept-Encoding: gzip, deflate
+          </pre>
+
+          When the resource exists, an HTTP 200 status code is returned.
+
+          <pre class="example highlight" title="Discover endpoints for an Orb service (response).">
+            HTTP/1.1 200 OK
+            Date: Sat, 30 Jan 2021 13:20:11 GMT
+            Content-Type: application/jrd+json
+            Connection: keep-alive
+            Access-Control-Allow-Origin: *
+
+            {
+              "subject": "https://alice.example.com/services/orb",
+              "aliases": [
+                "https://alice.example.com/@orb",
+                "https://alice.example.com/services/orb"
+              ],
+              "links": [
+                {
+                  "rel": "self",
+                  "type": "application/activity+json",
+                  "href": "https://alice.example.com/services/orb"
+                }
+              ]
+            }
+          </pre>
+
+          Aliases for a resource can also be queried. For example, the following is a request for orb@alice.example.com.
+          This request has the same response as the prior example.
+
+          <pre class="example highlight" title="Discover endpoints for an Orb service using service alias.">
+            GET /.well-known/webfinger?resource=acct%orb%40alice.example.com HTTP/1.1
+            Host: alice.example.com
+            Accept-Encoding: gzip, deflate
+          </pre>
+
+          WebFinger is also used to query for resource endpoint discovery.
+
+          <pre class="example highlight" title="Discover endpoints for an Orb transaction (request).">
+            GET /.well-known/webfinger?resource=https%3A%2F%2Fsally.example.com%2Ftransactions%2Fbafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y HTTP/1.1
+            Host: sally.example.com
+            Accept-Encoding: gzip, deflate
+          </pre>
+
+          When the resource exists, an HTTP 200 status code is returned.
+
+          <pre class="example highlight" title="Discover endpoints for an Orb transaction (response).">
+            HTTP/1.1 200 OK
+            Date: Sat, 30 Jan 2021 13:20:11 GMT
+            Content-Type: application/jrd+json
+            Connection: keep-alive
+            Access-Control-Allow-Origin: *
+
+            {
+              "subject": "https://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+              "links": [
+                {
+                  "rel": "self",
+                  "type": "application/ld+json",
+                  "href": "https://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                },
+                {
+                  "rel": "working-copy",
+                  "type": "application/ld+json",
+                  "href": "https://sally.example.com/cas/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                },
+                {
+                  "rel": "working-copy",
+                  "type": "application/ld+json",
+                  "href": "https://replica.example.com/cas/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                }
+              ]
+            }
+          </pre>
+
+          <p class="issue" title="Link relations">
+            Review the appropriate link relations in the above example.
+          </p>
+
+        </section>
+
+        <section class="normative">
+          <h3>Content Addressable Storage</h3>
+
+          <p>
+            Orb Servers expose Orb and Sidetree content as content-addressable objects.
+            These objects can be retrieved through Web endpoints or discovered using a Distributed Hash Table (DHT).
+          </p>
+
+          <section class="normative">
+            <h4>WebCAS</h4>
+            <p>
+              Orb Servers expose a CAS endpoint to provide access to Orb and Sidetree content.
+              Resources are retrieved by sending a HTTP GET to the Server's CAS path with the content identifier [[CID]] of the resource.
+            </p>
+
+            <pre class="example highlight" title="Retrieve content from WebCAS (request).">
+              GET /cas/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y HTTP/1.1
+              Host: sally.example.com
+              Accept-Encoding: gzip, deflate
+            </pre>
+
+            When the content exists, an HTTP 200 status code is returned.
+
+            <pre class="example highlight" title="Retrieve content from WebCAS (response).">
+              HTTP/1.1 200 OK
+              Date: Sat, 30 Jan 2021 13:20:11 GMT
+              Content-Type: text/plain; charset=utf-8
+              Connection: keep-alive
+              Access-Control-Allow-Origin: *
+
+              {
+                "@context": [
+                  "https://www.w3.org/2018/credentials/v1",
+                  "https://trustbloc.github.io/context/orb-v1.json",
+                  "https://w3c-ccg.github.io/lds-jws2020/contexts/lds-jws2020-v1.json"
+                ],
+                "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                "type": [
+                  "VerifiableCredential",
+                  "AnchorCredential"
+                ],
+                "issuer": "https://sally.example.com/services/orb",
+                "issuanceDate": "2021-01-27T09:30:10Z",
+                "credentialSubject": {
+                  "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                  "namespace": "did:orb",
+                  "version": "1",
+                  "previousTransactions": {
+                    "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
+                    "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
+                  }
+                },
+                "proofChain": [{}]                  
+              }
+            </pre>
+          </section>
+
+          <section class="normative">
+            <h4>Distributed Hash Table</h4>
+  
+            <p class="issue" title="An Orb DHT profile may be considered in the future">
+              We currently enable usage of the IPFS DHT.
+              In the future, we may want to additionally consider an Orb-specific profile to limit usage to VDRs.
+            </p>
+          </section>
+  
         </section>
 
       </section>
