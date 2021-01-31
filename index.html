@@ -524,7 +524,9 @@
               Accept-Encoding: gzip, deflate
             </pre>
 
-            When the discovery profile exists, an HTTP 200 status code is returned.
+            <p>
+              When the discovery profile exists, an HTTP 200 status code is returned.
+            </p>
 
             <pre class="example highlight" title="Client endpoint discovery (response)">
               HTTP/1.1 200 OK
@@ -568,8 +570,10 @@
               Accept-Encoding: gzip, deflate
             </pre>
   
-            When the discovery profile for the shared domain exists, an HTTP 200 status code is returned.
-  
+            <p>
+              When the discovery profile for the shared domain exists, an HTTP 200 status code is returned.
+            </p>
+
             <pre class="example highlight" title="Client shared domain discovery (response)">
               HTTP/1.1 200 OK
               Date: Sat, 30 Jan 2021 18:31:58 GMT
@@ -589,8 +593,10 @@
               Accept-Encoding: gzip, deflate
             </pre>
   
-            When the DID resolution capability exists, an HTTP 200 status code is returned.
-  
+            <p>
+              When the DID resolution capability exists, an HTTP 200 status code is returned.
+            </p>
+
             <pre class="example highlight" title="Client shared domain discovery (response)">
               HTTP/1.1 200 OK
               Date: Sat, 30 Jan 2021 18:31:58 GMT
@@ -637,7 +643,7 @@
         <section class="normative">
           <h3>Vocabulary</h3>
 
-          <section class="normative">
+          <section class="normative" id="anchorcredential">
             <h4>AnchorCredential</h4>
 
             <p>
@@ -680,7 +686,7 @@
                   "proofPurpose": "assertionMethod",
                   "created": "2021-01-27T09:30:05Z",
                   "verificationMethod": "did:example:abcd#key",
-                  "domain": "witness1.example.com",
+                  "domain": "https://witness1.example.com/ledgers/maple2021",
                   "jws": "eyJ..."
                 },
                 {
@@ -688,7 +694,7 @@
                   "proofPurpose": "assertionMethod",
                   "created": "2021-01-27T09:30:06Z",
                   "verificationMethod": "did:example:efgh#key",
-                  "domain": "witness2.example.com",
+                  "domain": "https://witness2.example.com/ledgers/spruce2021",
                   "jws": "eyJ..."
                 }]                  
               }
@@ -697,13 +703,13 @@
             The Orb transaction is embedded within an Activity during propagation flows.
             The Activity includes information about the CAS.
 
-            <pre class="example highlight" title="Orb transaction wrapped in a Create Activity">
+            <pre class="example highlight" title="Orb transaction as an AnchorCredential wrapped in a Create Activity">
               {
                 "@context": [
                   "https://www.w3.org/ns/activitystreams",
                   "https://trustbloc.github.io/context/orb-v1.json"
                 ],
-                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "id": "https://sally.example.com/services/orb/activities/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
                 "type": "Create",
                 "actor": "https://sally.example.com/services/orb",
                 "to": [
@@ -758,7 +764,9 @@
             Accept-Encoding: gzip, deflate
           </pre>
 
-          When the discovery profile exists, an HTTP 200 status code is returned.
+          <p>
+            When the discovery profile exists, an HTTP 200 status code is returned.
+          </p>
 
           <pre class="example highlight" title="Client endpoint discovery (response)">
             HTTP/1.1 200 OK
@@ -773,6 +781,10 @@
               "serviceEndpoint": "https://alice.example.com/services/orb"
             }
           </pre>
+
+          <p class="issue" title="nodeinfo">
+            Add description for .well-known/nodeinfo.
+          </p>
         </section>
 
         <section class="normative">
@@ -796,7 +808,9 @@
               Accept-Encoding: gzip, deflate
             </pre>
 
-            When the service profile exists, an HTTP 200 status code is returned.
+            <p>
+              When the service profile exists, an HTTP 200 status code is returned.
+            </p>
 
             <pre class="example highlight" title="Successful Actor response">
               HTTP/1.1 200 OK
@@ -820,7 +834,12 @@
                 "inbox": "https://alice.example.com/services/orb/inbox",
                 "outbox": "https://alice.example.com/services/orb/outbox",
                 "followers": "https://alice.example.com/services/orb/followers",
-                "following": "https://alice.example.com/services/orb/following"                
+                "following": "https://alice.example.com/services/orb/following",
+                "witnesses": "https://alice.example.com/services/orb/witnesses",
+                "witnessing": "https://alice.example.com/services/orb/witnessing",
+                "likes": "https://alice.example.com/services/orb/likes",
+                "liked": "https://alice.example.com/services/orb/liked",
+                "shares": "https://alice.example.com/services/orb/shares"
               }
             </pre>
 
@@ -844,6 +863,27 @@
             </p>
           </section>
 
+          <section class="normative" id='witness-activitypub'>
+            <h4>Collections</h3>
+
+            <p>
+              Please refer to [[ACTIVITYPUB]] <a href="https://www.w3.org/TR/activitypub/#collections">section 5</a> for general collections guidance.
+              An Orb Server exposes:
+            </p>
+
+            <ul>
+              <li>Outbox: provides an ordered collection of the activities published by the server.</li>
+              <li>Inbox: provides an ordered collection of the activities received by the server.</li>
+              <li>Followers: provides a collection (or ordered collection) of the other Orb servers following the server.</li>
+              <li>Following: provides a collection (or ordered collection) of the other Orb servers the server is following.</li>
+              <li>Witnesses: provides a collection (or ordered collection) of the other Orb servers that act as witnesses.</li>
+              <li>Witnessing: provides a collection (or ordered collection) of the other Orb servers the server is witnessing.</li>
+              <li>Likes: provides an ordered collection of the witness activities sent by the Orb server.</li>
+              <li>Liked: provides an ordered collection of the witness activities received by the Orb server.</li>
+              <li>Shares: provides an ordered collection of the propagation (announce) activities sent by the Orb server.</li>
+            </ul>
+          </section>
+  
           <section class="normative">
             <h4>Create Activity</h4>
             <p>
@@ -851,7 +891,7 @@
               A transaction is propagated to another Orb Server by performing an HTTP POST of an <i>Create</i> activity containing an <i>AnchorCredential</i> to its ActivityPub inbox endpoint.
             </p>
 
-            <pre class="example highlight" title="Propagating a new transaction (without an embedded graph node)">
+            <pre class="example highlight" title="Propagating a new transaction (without an embedded anchor credential)">
               POST /services/orb/inbox HTTP/1.1
               Host: alice.example.com
               Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
@@ -862,7 +902,7 @@
                   "https://www.w3.org/ns/activitystreams",
                   "https://trustbloc.github.io/context/orb"
                 ],
-                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "id": "https://sally.example.com/services/orb/activities/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
                 "type": "Create",
                 "actor": "https://sally.example.com/services/orb",
                 "to": [
@@ -885,7 +925,7 @@
               On success, HTTP status code 200 is returned.
             </p>
 
-            <pre class="example highlight" title="Propagating a new transaction (with an embedded graph node)">
+            <pre class="example highlight" title="Propagating a new transaction (with an embedded anchor credential)">
               POST /services/orb/inbox HTTP/1.1
               Host: alice.example.com
               Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
@@ -896,7 +936,7 @@
                   "https://www.w3.org/ns/activitystreams",
                   "https://trustbloc.github.io/context/orb-v1.json"
                 ],
-                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "id": "https://sally.example.com/services/orb/activities/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
                 "type": "Create",
                 "actor": "https://sally.example.com/services/orb",
                 "to": [
@@ -946,7 +986,7 @@
               A transaction is forwarded to another Orb Server by performing an HTTP POST of an <i>Announce</i> activity containing an <i>AnchorCredential</i> to its ActivityPub inbox endpoint.
             </p>
 
-            <pre class="example highlight" title="Propagating a forwarded transaction (without an embedded graph node)">
+            <pre class="example highlight" title="Propagating a forwarded transaction (without an embedded anchor credential)">
               POST /services/orb/inbox HTTP/1.1
               Host: alice.example.com
               Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
@@ -957,7 +997,7 @@
                   "https://www.w3.org/ns/activitystreams",
                   "https://trustbloc.github.io/context/orb-v1.json"
                 ],
-                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "id": "https://sally.example.com/services/orb/activities/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
                 "type": "Announce",
                 "actor": "https://sally.example.com/services/orb",
                 "to": [
@@ -986,7 +1026,7 @@
               On success, HTTP status code 200 is returned.
             </p>
 
-            <pre class="example highlight" title="Propagating a forwarded transaction (with an embedded graph node)">
+            <pre class="example highlight" title="Propagating a forwarded transaction (with an embedded anchor credential)">
               POST /services/orb/inbox HTTP/1.1
               Host: alice.example.com
               Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
@@ -997,7 +1037,7 @@
                   "https://www.w3.org/ns/activitystreams",
                   "https://trustbloc.github.io/context/orb-v1.json"
                 ],
-                "id": "https://sally.example.com/services/orb/outbox/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "id": "https://sally.example.com/services/orb/activities/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
                 "type": "Announce",
                 "actor": "https://sally.example.com/services/orb",
                 "to": [
@@ -1145,11 +1185,129 @@
 
         </section>
 
-        <section class="normative">
-          <h3>Witness</h3>
+        <section class="normative" id='witness-activitypub'>
+          <h3>Witness ActivityPub</h3>
 
-          <p>
-          </p>
+          <section class="normative">
+            <h4>Offer Activity</h4>
+
+            <p>
+              An Orb Server sends a <i>preannouncement</i> of an Orb transaction using an <i>Offer</i> activity populated with an <i>AnchorCredential</i>.
+              The <i>AnchorCredential</i> contains a Linked Data Proof from the Orb Writer server.
+              The <i>Offer</i> activity also includes a <i>startTime</i> and <i>endTime</i> indicating the time period where the Orb Server will accept
+              linked data proofs for inclusion into the Orb transaction.
+              The <i>startTime</i> is the current timestamp for the Orb Server.
+              The <i>endTime</i> is the cut-off timestamp for inclusion into the transaction.
+            </p>
+
+            <pre class="example highlight" title="Propagating a new transaction (with an embedded anchor credential)">
+              POST /services/orb/inbox HTTP/1.1
+              Host: witness1.example.com
+              Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+              Accept-Encoding: gzip, deflate
+
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams"
+                ],
+                "id": "https://sally.example.com/services/orb/activities/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                "type": "Offer",
+                "actor": "https://sally.example.com/services/orb",
+                "to": [
+                  "https://sally.example.com/services/orb/witnesses",
+                  "https://www.w3.org/ns/activitystreams#Public"
+                ],
+                "startTime": "2021-01-27T09:30:10Z",
+                "endTime": "2021-01-27T09:31:10Z",
+                "object": {
+                  "@context": [
+                    "https://www.w3.org/2018/credentials/v1",
+                    "https://trustbloc.github.io/context/orb-v1.json"
+                  ],
+                  "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                  "type": [
+                    "VerifiableCredential",
+                    "AnchorCredential"
+                  ],
+                  "issuer": "https://sally.example.com/services/orb",
+                  "issuanceDate": "2021-01-27T09:30:10Z",
+                  "credentialSubject": {
+                    "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                    "namespace": "did:orb",
+                    "version": "1",
+                    "previousTransactions": {
+                      "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
+                      "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
+                    }
+                  },
+                  "proof": {}
+                }
+              }
+            </pre>
+          </section>
+
+          <section class="normative">
+            <h4>Like Activity</h4>
+
+            <p>
+              A Witness promises to include an Orb transaction into their ledger using a <i>Like</i> activity populated with its linked data proof
+              of an <i>AnchorCredential</i> received in a previous <i>Offer</i>.
+              A reference to the previously offered object is populated into the <i>object</i> field.
+              The Witness includes the time range when the Orb transaction will become included into their ledger using <i>startTime</i> and <i>endTime</i> fields.
+            </p>
+
+            <pre class="example highlight" title="Providing a Linked Data Proof as a witness">
+              POST /services/orb/inbox HTTP/1.1
+              Host: witness1.example.com
+              Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+              Accept-Encoding: gzip, deflate
+
+              {
+                "@context": [
+                  "https://www.w3.org/ns/activitystreams"
+                ],
+                "id": "https://witness1.example.com/services/orb/likes/87bcd005-abb6-433d-a889-18bc1ce84988",
+                "type": "Like",
+                "actor": "https://witness1.example.com/services/orb",
+                "to": [
+                  "https://sally.example.com/services/orb",
+                  "https://www.w3.org/ns/activitystreams#Public"
+                ],
+                "startTime": "2021-01-27T09:30:15Z",
+                "endTime": "2021-01-27T09:40:15Z",
+                "object": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                "result": {
+                  "@context": [
+                    "https://w3id.org/security/v1",
+                    "https://w3c-ccg.github.io/lds-jws2020/contexts/lds-jws2020-v1.json"
+                  ],
+                  "proof": {
+                    "type": "JsonWebSignature2020",
+                    "proofPurpose": "assertionMethod",
+                    "created": "2021-01-27T09:30:15Z",
+                    "verificationMethod": "did:example:abcd#key",
+                    "domain": "https://witness1.example.com/ledgers/maple2021",
+                    "jws": "eyJ..."  
+                  }
+                }
+              }
+            </pre>
+
+            <p class="issue" title="Like vs Witness Activity">
+              Review the appropriate Activity type in the above example.
+            </p>
+
+            <p class="issue" title="Include full credential in response">
+              Review the whether or not we should embed the rest of the VC in the response.
+            </p>
+
+            <p>
+              The Writer Orb Server assembles the linked data proofs into a proof chain to create the final <i>AnchorCredential</i>.
+              The proof chain starts with the Writer's linked data proof followed by each witness's linked data proof.
+              See <a href="#anchorcredential"></a>.
+            </p>
+
+          </section>
         </section>
 
         <section class="normative">
@@ -1167,7 +1325,9 @@
             Accept-Encoding: gzip, deflate
           </pre>
 
-          When the resource exists, an HTTP 200 status code is returned.
+          <p>
+            When the resource exists, an HTTP 200 status code is returned.
+          </p>
 
           <pre class="example highlight" title="Discover endpoints for an Orb service (response).">
             HTTP/1.1 200 OK
@@ -1192,8 +1352,10 @@
             }
           </pre>
 
-          Aliases for a resource can also be queried. For example, the following is a request for orb@alice.example.com.
-          This request has the same response as the prior example.
+          <p>
+            Aliases for a resource can also be queried. For example, the following is a request for orb@alice.example.com.
+            This request has the same response as the prior example.
+          </p>
 
           <pre class="example highlight" title="Discover endpoints for an Orb service using service alias.">
             GET /.well-known/webfinger?resource=acct%orb%40alice.example.com HTTP/1.1
@@ -1201,7 +1363,9 @@
             Accept-Encoding: gzip, deflate
           </pre>
 
-          WebFinger is also used to query for resource endpoint discovery.
+          <p>
+            WebFinger is also used to query for resource endpoint discovery.
+          </p>
 
           <pre class="example highlight" title="Discover endpoints for an Orb transaction (request).">
             GET /.well-known/webfinger?resource=https%3A%2F%2Fsally.example.com%2Ftransactions%2Fbafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y HTTP/1.1
@@ -1209,7 +1373,9 @@
             Accept-Encoding: gzip, deflate
           </pre>
 
-          When the resource exists, an HTTP 200 status code is returned.
+          <p>
+            When the resource exists, an HTTP 200 status code is returned.
+          </p>
 
           <pre class="example highlight" title="Discover endpoints for an Orb transaction (response).">
             HTTP/1.1 200 OK
@@ -1267,7 +1433,9 @@
               Accept-Encoding: gzip, deflate
             </pre>
 
-            When the content exists, an HTTP 200 status code is returned.
+            <p>
+              When the content exists, an HTTP 200 status code is returned.
+            </p>
 
             <pre class="example highlight" title="Retrieve content from WebCAS (response).">
               HTTP/1.1 200 OK
@@ -1319,9 +1487,190 @@
     <section class="normative">
       <h2>Witness Ledger</h2>
 
-      <p class="issue" title="Witness Merkle Tree">
-        TODO: In a followup revision, we will specify a witness ledger profile based on certificate transparency [[RFC6962]].
-      </p>
+      <section class="normative">
+        <h3>Ledger Types</h3>
+
+        <table class="simple">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type Code</th>
+              <th>Specification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Verifiable Credential Transparency</td>
+              <td>vct-v1</td>
+              <td><a href="#vct-v1"></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="normative">
+        <h3>Discovery</h3>
+
+        <p>
+          The linked data proof includes a domain property that indicates the ledger that promises to include an Orb transaction.
+          The type of the ledger can be determined using the WebFinger protocol [[RFC7033]] along with known replicas, if any.
+          The replica links have the relation field set to <i>alternate</i>.
+        </p>
+
+        <pre class="example highlight" title="Ledger discovery (request)">
+          GET /.well-known/webfinger?resource=https%3A%2F%2Fwitness1.example.com%2Fledgers%2Fmaple2021 HTTP/1.1
+          Host: witness1.example.com
+          Accept-Encoding: gzip, deflate
+        </pre>
+
+        <p>
+          When the ledger exists, an HTTP 200 status code is returned.
+        </p>
+
+        <pre class="example highlight" title="Client shared domain discovery (response)">
+          HTTP/1.1 200 OK
+          Date: Sat, 30 Jan 2021 18:31:58 GMT
+          Content-Type: application/jrd+json
+          Connection: keep-alive
+          Access-Control-Allow-Origin: *
+
+          {
+            "subject": "https://witness1.example.com/ledgers/maple2021",
+            "properties": {
+              "https://trustbloc.dev/ns/ledger-type": "vct-v1"
+            },
+            "links": [
+              {
+                "rel": "self",
+                "href": "https://witness1.example.com/ledgers/maple2021"
+              },
+              {
+                "rel": "alternate",
+                "href": "https://replica.example.com/ledgers/maple2021"
+              }
+            ]
+          }
+        </pre>     
+
+      </section>
+
+      <section class="normative" id="vct-v1">
+        <h3>Verifiable Credential Transparency (VCT)</h3>
+
+        <p>
+          The Verifiable Credential Transparency (VCT) Witness ledger is based on on certificate transparency [[RFC6962]].
+          The Anchor Credentials are included into VCT ledgers (as append-only Merkle Tree logs).
+          VCT ledgers may be named to enable rollover.
+        </p>
+
+        <p>
+          We extend [[RFC6962]] to include Verifiable Credential (VC) [[VC-DATA-MODEL]] objects.
+          The following subsections describe the endpoints and the additional VC type for the Merkle Tree.
+        </p>
+
+        <section class="normative">
+          <h4>Add Verifiable Credential</h4>
+          <p>
+            Orb <i>AnchorCredentials</i> are added using the process described in <a href='#witness-activitypub'></a>, as required by Orb.
+          </p>
+        </section>
+       
+        <section class="normative">
+          <h4>Latest Signed Tree Head</h4>
+          <p>
+            The <i>Retrieve Latest Signed Tree Head</i> endpoint is described in <a href="https://tools.ietf.org/html/rfc6962#section-4.3">RFC6962</a>.
+            In this example, a signed tree head is requested from a ledger named <i>maple2021</i>.
+          </p>
+
+          <pre class="example highlight" title="Retrieve signed tree head (request).">
+            GET /ledgers/maple2021/ct/v1/get-sth HTTP/1.1
+            Host: witness1.example.com
+            Accept-Encoding: gzip, deflate
+          </pre>
+
+          <pre class="example highlight" title="Retrieve signed tree head (response).">
+            HTTP/1.1 200 OK
+            Date: Sat, 30 Jan 2021 13:20:11 GMT
+            Content-Type: application/json
+            Connection: keep-alive
+            Access-Control-Allow-Origin: *
+
+            {
+              "tree_size": 100,
+              "timestamp": 1612097791,
+              "sha256_root_hash": "qOK55eWhQ96DmRbAsHTridM1BrxZtqJAW2uF0ceQcTo=",
+              "tree_head_signature": "6UIXmSf8Pg9jY6e8DUPguEW3sl0HxX0fckMnP5ckUchcnsjlXee0722AV4RL1+xNEGVX/poCKu/wPH9teprMyw",
+            }
+          </pre>
+        </section>
+
+        <section class="normative">
+          <h4>Merkle Consistency Proof</h4>
+
+          <p>
+            The <i>Retrieve Merkle Consistency Proof between Two Signed Tree Heads</i> endpoint is described in <a href="https://tools.ietf.org/html/rfc6962#section-4.4">RFC6962</a>.
+          </p>
+        </section>
+
+        <section class="normative">
+          <h4>Merkle Audit Proof</h4>
+
+          <p>
+            The <i>Retrieve Merkle Audit Proof from Log by Leaf Hash</i> endpoint is described in <a href="https://tools.ietf.org/html/rfc6962#section-4.5">RFC6962</a>.
+          </p>
+        </section>
+
+        <section class="normative">
+          <h4>Retrieve Entries</h4>
+
+          <p>
+            The <i>Retrieve Entries from Log</i> endpoint is described in <a href="https://tools.ietf.org/html/rfc6962#section-4.6">RFC6962</a>.
+          </p>
+
+          <p>
+            extra_data: We extend the entry types to include verifiable credentials.
+            In the case of a VC type, <i>extra_data</i> contains the verifiable credential.
+          </p>
+        </section>
+
+        <section class="normative">
+          <h4>Acceptable Issuers</h4>
+
+          <p class="issue" title="Equivalent of accepted root certificates">
+            TODO: In a followup revision, we may specify an equivalent endpoint for [[RFC6962]] <a href="https://tools.ietf.org/html/rfc6962#section-4.7">section 4.7</a>.
+          </p>
+        </section>
+
+        <section class="normative">
+          <h4>Entry and Audit Proof</h4>
+
+          <p>
+            The <i>Retrieve Entry+Merkle Audit Proof</i> endpoint is described in <a href="https://tools.ietf.org/html/rfc6962#section-4.8">RFC6962</a>.
+          </p>
+
+          <p>
+            extra_data: We extend the entry types to include verifiable credentials.
+            In the case of a VC type, <i>extra_data</i> contains the verifiable credential.
+          </p>
+        </section>
+
+        <section class="normative">
+          <h4>Merkle Tree and Entries</h4>
+
+          <p>
+            We extend the <i>LogEntryType</i> enumeration described in <a href="https://tools.ietf.org/html/rfc6962#section-3.1">RFC6962</a> to include <i>vc_entry</i>.
+            The MerkleTree structure described in <a href="https://tools.ietf.org/html/rfc6962#section-3.4">RFC6962</a> is extended to include a <i>vc_entry</i> case.
+            In the case of <i>vc_entry</i>, the <i>signed_entry</i> field of the Merkle Tree contains a Verifiable Credential.
+          </p>
+
+        </section>
+
+        <section class="normative">
+          <h4>Monitoring and Auditing</h4>
+
+          <p>Please refer to [[RFC6962]] <a href="<a href="https://tools.ietf.org/html/rfc6962#section-5.3">section 5.3</a> and <a href="<a href="https://tools.ietf.org/html/rfc6962#section-5.4">section 5.4</a>.</p>
+        </section>
+      </section>
     </section>
       
     <section class="informative">
