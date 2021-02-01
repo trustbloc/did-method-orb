@@ -822,7 +822,8 @@
               {
                 "@context": [
                 "https://www.w3.org/ns/activitystreams",
-                "https://w3id.org/security/v1"
+                "https://w3id.org/security/v1",
+                "https://trustbloc.github.io/context/orb-v1.json"
                 ],
                 "id": "https://alice.example.com/services/orb",
                 "type": "Service",
@@ -863,7 +864,7 @@
             </p>
           </section>
 
-          <section class="normative" id='witness-activitypub'>
+          <section class="normative">
             <h4>Collections</h3>
 
             <p>
@@ -910,13 +911,13 @@
                   "https://www.w3.org/ns/activitystreams#Public"
                 ],
                 "published": "2021-01-27T09:30:10Z",
-                "target": {
-                  "type": "Cas",
-                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
-                },
                 "object": {
                   "id": "http://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
-                  "type": "AnchorCredential",
+                  "type": "AnchorCredentialReference",
+                  "target": {
+                    "type": "Cas",
+                    "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                  }
                 }
               }
             </pre>
@@ -994,8 +995,7 @@
 
               {
                 "@context": [
-                  "https://www.w3.org/ns/activitystreams",
-                  "https://trustbloc.github.io/context/orb-v1.json"
+                  "https://www.w3.org/ns/activitystreams"
                 ],
                 "id": "https://sally.example.com/services/orb/activities/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
                 "type": "Announce",
@@ -1005,17 +1005,20 @@
                   "https://www.w3.org/ns/activitystreams#Public"
                 ],
                 "published": "2021-01-27T09:30:10Z",
-                "target": {
-                  "type": "Cas",
-                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
-                },
                 "object": {
                   "type": "Collection",
                   "totalItems": 1,
                   "items": [
                     {
+                      "@context": [
+                        "https://trustbloc.github.io/context/orb-v1.json"
+                      ],
                       "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                      "type": "AnchorCredential",
+                      "type": "AnchorCredentialReference",
+                      "target": {
+                        "type": "Cas",
+                        "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
+                      }
                     }
                   ]
                 }
@@ -1045,36 +1048,40 @@
                   "https://www.w3.org/ns/activitystreams#Public"
                 ],
                 "published": "2021-01-27T09:30:10Z",
-                "target": {
-                  "type": "Cas",
-                  "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
-                },
                 "object": {
                   "type": "Collection",
                   "totalItems": 1,
                   "items": [
                     {
-                      "@context": [
-                        "https://www.w3.org/2018/credentials/v1",
-                        "https://trustbloc.github.io/context/orb-v1.json"
-                      ],
-                      "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                      "type": [
-                        "VerifiableCredential",
-                        "AnchorCredential"
-                      ],
-                      "issuer": "https://sally.example.com/services/orb",
-                      "issuanceDate": "2021-01-27T09:30:10Z",
-                      "credentialSubject": {
-                        "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
-                        "namespace": "did:orb",
-                        "version": "1",
-                        "previousTransactions": {
-                          "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
-                          "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
-                        }
+                      "id": "http://sally.example.com/transactions/bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y",
+                      "type": "AnchorCredentialReference",
+                      "target": {
+                        "type": "Cas",
+                        "id":  "bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y"
                       },
-                      "proofChain": [{}]
+                      "object": {
+                        "@context": [
+                          "https://www.w3.org/2018/credentials/v1",
+                          "https://trustbloc.github.io/context/orb-v1.json"
+                        ],
+                        "id": "http://sally.example.com/transactions/bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                        "type": [
+                          "VerifiableCredential",
+                          "AnchorCredential"
+                        ],
+                        "issuer": "https://sally.example.com/services/orb",
+                        "issuanceDate": "2021-01-27T09:30:10Z",
+                        "credentialSubject": {
+                          "anchorString": "bafkreihwsnuregceqh263vgdathcprnbvatyat6h6mu7ipjhhodcdbyhoy",
+                          "namespace": "did:orb",
+                          "version": "1",
+                          "previousTransactions": {
+                            "EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA": "bafkreibmrmenuxhgaomod4m26ds5ztdujxzhjobgvpsyl2v2ndcskq2iay",
+                            "EiABk7KK58BVLHMataxgYZjTNbsHgtD8BtjF0tOWFV29rw": "bafkreibh3whnisud76knkv7z7ucbf3k2rs6knhvajernrdabdbfaomakli"
+                          }
+                        },
+                        "proofChain": [{}]
+                      }
                     }
                   ]
                 }
