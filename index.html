@@ -397,18 +397,21 @@
         </p>
 
         <pre>
-          did-orb-format       = "did:orb:" cas-discovery-scheme ":" 
-                                 min-graph-cid ":" unique-suffix
-          cas-discovery-scheme = dht-scheme / web-scheme
-          dht-scheme           = ( "ipfs" )
-          web-scheme           = "web:" reg-name
-          reg-name             = 1*idchar                ; more constrained than [RFC3986]
-          min-graph-cid        = 1*idchar
-          unique-suffix        = 1*idchar
+          did-orb-format        = "did:orb:" cas-discovery-scheme [":" min-graph-cid]
+                                  ":" did-suffix [":" long-form-suffix-data]
+          cas-discovery-scheme  = dht-scheme / web-scheme / local-scheme
+          dht-scheme            = ( "ipfs" )
+          web-scheme            = "web:" reg-name
+          local-scheme          = "local"
+          reg-name              = 1*idchar                ; more constrained than [RFC3986]
+          min-graph-cid         = 1*idchar
+          did-suffix            = 1*idchar
+          long-form-suffix-data = 1*idchar                ; only applicable in the local-scheme
         </pre>
 
         <p>
           See [[?RFC3986]] for the original definition of reg-name and [[DID-CORE]] for the definition of idchar.
+          [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>long-form-suffix-data</i> elements.
         </p>
 
         <pre class="example" title="An Orb DID that uses the Web scheme for content discovery">
@@ -496,15 +499,34 @@
         </section>
 
         <section class="normative">
-          <h3>DID Controller policies</h3>
+          <h3>Propagation Delay and Canonical IDs</h3>
 
-          <p class="issue" title="Setting a witness">
-            TODO: In a followup revision, we will specify a Sidetree operation for associating a Witness to a DID.
-          </p>
+          Orb DIDs support Sidetree <a href="https://identity.foundation/sidetree/spec/#did-uri-composition">DID URI Composition</a>
+          for the <i>did-suffix</i> and <i>long-form-suffix-data</i> elements.
+          
+          An Orb resolver with previous knowledge of a particular suffix (or with the inclusion of <i>long-form-suffix-data</i>) is able
+          to return a resolution result without additional prefix information.
+          This situation typically occurs when there is a need to immediately use a freshly created DID suffix that hasn't yet been propagated.
 
-          <p class="issue" title="Stale operations">
-            TODO: In a followup revision, we will specify setting the issuance date of an operation to indicate staleness.
-          </p>
+          <pre class="example highlight" title="Locally known DID">
+            did:orb:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
+          </pre>
+          
+          <pre class="example highlight" title="Long-form DID">
+            did:orb:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA:ey...
+          </pre>
+
+          <pre class="example highlight" title="Not yet propagated DID only known to example.com">
+            did:orb:web:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
+          </pre>
+
+          When an Orb Server has propagation information for a resolved DID, the server includes the <i>min-graph-cid</i> segment within the <i>canonicalId</i>
+          property of the returned DID document metadata.
+          The <i>min-graph-cid</i> is set to the CID of the latest known AnchorCredential that contains a <i>Create</i> or <i>Recover</i> operation for the DID.
+
+          After a DID controller sends a <i>Create</i> or <i>Recover</i> operation to an Orb Server, the resolution result may have no (or an outdated) <i>min-graph-cid</i> segment.
+          The DID controller may need to retry resolution until the operation has been propagated and the CID becomes available.
+          Once the CID is available, resolution responses contain the updated <i>canonicalId</i> property.
         </section>
 
         <section class="normative">
@@ -631,6 +653,22 @@
             </pre>            
           </section>
         </section>
+
+        <section class="normative">
+          <h3>DID Controller Policies</h3>
+          
+          <p class="issue" title="Setting a witness">
+            TODO: In a followup revision, we will specify a Sidetree operation for associating a Witness to a DID.
+          </p>
+        </section>
+
+        <section class="normative">
+          <h3>Operation Anchoring Validity</h3>
+
+          <p class="issue" title="Stale operations">
+            TODO: In a followup revision, we will specify setting the issuance date of an operation to indicate staleness.
+          </p>
+        </section>          
     </section>
 
     <section class="normative">
