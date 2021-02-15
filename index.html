@@ -665,8 +665,24 @@
         <section class="normative">
           <h3>Operation Anchoring Validity</h3>
 
-          <p class="issue" title="Stale operations">
-            TODO: In a followup revision, we will specify setting the issuance date of an operation to indicate staleness.
+          <p>
+            The DID Controller includes their skew-adjusted current timestamp in the <i>anchorFrom</i> property of an operation's data object payload.
+            To allow for clock skew, the DID Controller subtracts five minutes from their current timestamp.
+            The timestamp is formatted as a [[RFC7519]] <i>NumericDate</i>.
+          </p>
+
+          <p>
+            The DID Controller includes their skew-adjusted current timestamp in the <i>anchorUntil</i> property of an operation's data object payload.
+            To allow for batching and clock skew, the DID Controller adds 25 minutes to their current timestamp.
+            The timestamp is formatted as a [[RFC7519]] <i>NumericDate</i>.
+          </p>
+
+          <p>
+            The delta range between <i>anchorFrom</i> and <i>anchorUntil</i> is 30 minutes.
+          </p>
+
+          <p class="issue" title="Protocol parameter for maximum time delta">
+            TODO: In a followup revision, we will specify protocol parameters to constrain the delta range.
           </p>
         </section>          
     </section>
