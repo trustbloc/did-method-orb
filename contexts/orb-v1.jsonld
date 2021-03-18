@@ -40,6 +40,20 @@
                 "id": "@id",
                 "type": "@type"
             }
+        },
+        "ContentAddressedStorage": {
+            "@id": "https://trustbloc.dev/ns/orb#ContentAddressedStorage",
+            "@context": {
+                "@version": 1.1,
+                "@protected": true,
+
+                "id": "@id",
+                "type": "@type",
+
+                "orb": "https://trustbloc.dev/ns/orb#",
+        
+                "cid": "orb:contentIdentifier"
+            }
         }
     }
 }
