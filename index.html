@@ -399,9 +399,9 @@
         <pre>
           did-orb-format        = "did:orb:" cas-discovery-scheme [":" min-graph-cid]
                                   ":" did-suffix [":" long-form-suffix-data]
-          cas-discovery-scheme  = dht-scheme / web-scheme / local-scheme
+          cas-discovery-scheme  = dht-scheme / webcas-scheme / local-scheme
           dht-scheme            = ( "ipfs" )
-          web-scheme            = "web:" reg-name
+          webcas-scheme         = "webcas:" reg-name
           local-scheme          = "local"
           reg-name              = 1*idchar                ; more constrained than [RFC3986]
           min-graph-cid         = 1*idchar
@@ -414,8 +414,8 @@
           [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>long-form-suffix-data</i> elements.
         </p>
 
-        <pre class="example" title="An Orb DID that uses the Web scheme for content discovery">
-          did:orb:web:example.com:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        <pre class="example" title="An Orb DID that uses the WebCAS scheme for content discovery">
+          did:orb:webcas:example.com:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
         </pre>
 
         <pre class="example" title="An Orb DID that uses the IPFS scheme for content discovery">
@@ -517,7 +517,7 @@
           </pre>
 
           <pre class="example highlight" title="Not yet propagated DID only known to example.com">
-            did:orb:web:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
+            did:orb:webcas:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
           </pre>
 
           When an Orb Server has propagation information for a resolved DID, the server includes the <i>min-graph-cid</i> segment within the <i>canonicalId</i>
