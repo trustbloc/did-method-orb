@@ -176,7 +176,7 @@
       </p>
 
       <p>
-        Orb enables the VDR to be replicated between independent systems to increase the overall resiliance of the ecosytem.
+        Orb enables the VDR to be replicated between independent systems to increase the overall resilience of the ecosystem.
         The transaction model includes Witness signatures as a common Orb format regardless of the Witness ledger implementation.
         To achieve our system monitoring properties, we assume a Witness holds a <i>monitorable</i> ledger that stores timestamped transactions with an append-only model.
         Witness ledgers can be replicated and monitored for consistent behavior.
@@ -286,7 +286,7 @@
           designate some of the other Orb servers as <i>trusted</i>. These trusted servers are then used to determine relative timing between batches.
           In the case that a majority viewpoint of itself and the other <i>trusted</i> Orb servers exists, that majority viewpoint will be used to
           determine the relative timing of the batches. From the relative timing of the batches, we also resolve the relative timing of the branch in the DID.
-          An Orb server does not wait for consensus - its viewpoint may evenutally converge to a majority view, over time, in these situations.
+          An Orb server does not wait for consensus - its viewpoint may eventually converge to a majority view, over time, in these situations.
         </p>
        
         <p>
@@ -322,7 +322,7 @@
           Upon successful validation, each witness returns a signed transaction timestamp and a promise to include the Orb transaction into their Ledger.
           The Orb transaction (combined with the signed transaction timestamps) is then written into the CAS and propagated.
           When an Orb Server receives a propagated transaction, they invalidate (as stale) each Sidetree operation that has a timestamp that is not within an acceptable delta of the Orb transaction's timestamp.
-          When these proofs originate from <i>trusted</i> servers, their timing information is immediately applied after recieving an Orb transaction propagation.
+          When these proofs originate from <i>trusted</i> servers, their timing information is immediately applied after receiving an Orb transaction propagation.
           An Orb server that receives witnessed transactions from trusted servers likely holds the majority timing view immediately in these situations.
         </p>
       </section>
@@ -341,7 +341,7 @@
 
         <p>
           As a DID can be associated to a particular Witness, that Witness provides observations of the DID controller's behavior.
-          In addition to proagating for a DID, the associated Witness is also given extra weight as a tie-breaker for resolving the late publishing scenario described in the previous section.
+          In addition to propagating for a DID, the associated Witness is also given extra weight as a tie-breaker for resolving the late publishing scenario described in the previous section.
         </p>
 
         <p>
