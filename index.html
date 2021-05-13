@@ -1193,7 +1193,7 @@
           </section>
 
           <section class="normative">
-            <h4>Accept Activity</h4>
+            <h4>Accept Follow Activity</h4>
               <p>
                 An Orb Server accepts a Follow request by sending an HTTP POST of a <i>Accept</i> activity to the requesting Orb Server's ActivityPub inbox endpoint.
                 Refer to <a href="https://www.w3.org/TR/activitypub/#accept-activity-inbox">ActivityPub</a> for guidance. 
@@ -1226,7 +1226,7 @@
           </section>
 
           <section class="normative">
-            <h4>Reject Activity</h4>
+            <h4>Reject Follow Activity</h4>
               <p>
                 An Orb Server rejects a Follow request by sending an HTTP POST of a <i>Reject</i> activity to the requesting Orb Server's ActivityPub inbox endpoint.
                 Refer to <a href="https://www.w3.org/TR/activitypub/#reject-activity-inbox">ActivityPub</a> for guidance. 
@@ -1262,6 +1262,108 @@
 
         <section class="normative" id='witness-activitypub'>
           <h3>Witness ActivityPub</h3>
+
+          <section class="normative">
+            <h4>InviteWitness Activity</h4>
+            <p>
+              An Orb Server invites another Orb Server to be a witness by performing an HTTP POST of an <i>InviteWitness</i> activity to its ActivityPub inbox endpoint.
+            </p>
+
+            <pre class="example highlight" title="Request to invite an Orb Server to be a witness">
+                POST /services/orb/inbox HTTP/1.1
+                Host: alice.example.com
+                Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+                Accept-Encoding: gzip, deflate
+
+                {
+                  "@context": [
+                    "https://www.w3.org/ns/activitystreams",
+                    "https://trustbloc.github.io/did-method-orb/contexts/anchor/v1"
+                  ],
+                  "id": "https://sally.example.com/activities/7052018f-9530-3aef-8a46-20bde9445a21",
+                  "type": "InviteWitness",
+                  "to": "https://alice.example.com/services/orb",
+                  "actor": "https://sally.example.com/services/orb"
+                }
+              </pre>
+
+            <p>
+              On success, HTTP status code 200 is returned.
+            </p>
+          </section>
+
+          <section class="normative">
+            <h4>Accept InviteWitness Activity</h4>
+            <p>
+              An Orb Server accepts an InviteWitness request by sending an HTTP POST of a <i>Accept</i> activity to the requesting Orb Server's ActivityPub inbox endpoint.
+              Upon receiving this activity, the requesting Orb Server adds the actor to its collection of 'witnesses'.
+              Refer to <a href="https://www.w3.org/TR/activitypub/#accept-activity-inbox">ActivityPub</a> for guidance.
+            </p>
+
+            <pre class="example highlight" title="Accept invite witness request from an Orb Server">
+                POST /services/orb/inbox HTTP/1.1
+                Host: sally.example.com
+                Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+                Accept-Encoding: gzip, deflate
+
+                {
+                  "@context": [
+                    "https://www.w3.org/ns/activitystreams",
+                    "https://trustbloc.github.io/did-method-orb/contexts/anchor/v1"
+                  ],
+                  "id": "https://alice.example.com/activities/f017e49a-7256-44a0-255d-3dc304ae67f7",
+                  "to": "https://sally.example.com/services/orb",
+                  "type": "Accept",
+                  "actor": "https://alice.example.com/services/orb",
+                  "object": {
+                      "id": "https://sally.example.com/activities/7052018f-9530-3aef-8a46-20bde9445a21",
+                      "to": "https://alice.example.com/services/orb",
+                      "type": "InviteWitness",
+                      "actor": "https://sally.example.com/services/orb",
+                  }
+                }
+              </pre>
+
+            <p>
+              On success, HTTP status code 200 is returned.
+            </p>
+          </section>
+
+          <section class="normative">
+            <h4>Reject InviteWitness Activity</h4>
+            <p>
+              An Orb Server rejects an InviteWitness request by sending an HTTP POST of a <i>Reject</i> activity to the requesting Orb Server's ActivityPub inbox endpoint.
+              Refer to <a href="https://www.w3.org/TR/activitypub/#reject-activity-inbox">ActivityPub</a> for guidance.
+            </p>
+
+            <pre class="example highlight" title="Reject invite witness request from an Orb Server">
+                POST /services/orb/inbox HTTP/1.1
+                Host: sally.example.com
+                Content-Type: application/ld+json; profile="https://www.w3.org/ns/activitystreams"
+                Accept-Encoding: gzip, deflate
+
+                {
+                  "@context": [
+                    "https://www.w3.org/ns/activitystreams",
+                    "https://trustbloc.github.io/did-method-orb/contexts/anchor/v1"
+                  ],
+                  "id": "https://alice.example.com/activities/b013e49a-6256-24a0-855d-1dc304ar67f7",
+                  "to": "https://sally.example.com/services/orb",
+                  "type": "Reject",
+                  "actor": "https://alice.example.com/services/orb",
+                  "object": {
+                      "id": "https://sally.example.com/activities/7052018f-9530-3aef-8a46-20bde9445a21",
+                      "to": "https://alice.example.com/services/orb",
+                      "type": "InviteWitness",
+                      "actor": "https://sally.example.com/services/orb",
+                  }
+                }
+              </pre>
+
+            <p>
+              On success, HTTP status code 200 is returned.
+            </p>
+          </section>
 
           <section class="normative">
             <h4>Offer Activity</h4>
