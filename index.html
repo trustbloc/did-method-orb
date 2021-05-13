@@ -401,11 +401,9 @@
           did-orb-format        = "did:orb:" (orb-canonical-did / orb-scheme-did / unpublished-did)
           orb-canonical-did     = min-graph-cid ":" did-suffix
           orb-scheme-did        = (dht-scheme / webcas-scheme) ":" orb-canonical-did
-          unpublished-did       = "interim:" (web-interim-scheme / local-interim-scheme)
+          unpublished-did       = "interim:" reg-name ":" did-suffix [":" long-form-suffix-data]
           dht-scheme            = ( "ipfs" )
           webcas-scheme         = "webcas:" reg-name
-          web-interim-scheme    = reg-name ":" did-suffix
-          local-interim-scheme  = "local" ":" did-suffix [":" long-form-suffix-data]
           reg-name              = 1*idchar                ; more constrained than [RFC3986]
           min-graph-cid         = 10*idchar               ; a short 3rd segment is reserved for schemes.
           did-suffix            = 1*idchar
@@ -519,16 +517,12 @@
           to return a resolution result without additional prefix information.
           This situation typically occurs when there is a need to immediately use a freshly created DID suffix that hasn't yet been propagated.
 
-          <pre class="example highlight" title="Locally known DID">
-            did:orb:interim:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
+          <pre class="example highlight" title="Not yet propagated DID only known to example.com">
+            did:orb:interim:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
           </pre>
           
           <pre class="example highlight" title="Long-form DID">
-            did:orb:interim:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA:ey...
-          </pre>
-
-          <pre class="example highlight" title="Not yet propagated DID only known to example.com">
-            did:orb:interim:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
+            did:orb:interim:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA:ey...
           </pre>
 
           When an Orb Server has propagation information for a resolved DID, the server includes the <i>min-graph-cid</i> segment within the <i>canonicalId</i>
@@ -538,6 +532,11 @@
           After a DID controller sends a <i>Create</i> or <i>Recover</i> operation to an Orb Server, the resolution result may have no (or an outdated) <i>min-graph-cid</i> segment.
           The DID controller may need to retry resolution until the operation has been propagated and the CID becomes available.
           Once the CID is available, resolution responses contain the updated <i>canonicalId</i> property.
+
+          <p class="issue" title="interim DIDs without domain">
+            Since Orb is based on ActivityPub, we should have a domain available for interim DIDs.
+            Are there cases where we would indicate no domain with a value like 'local'?
+          </p>  
         </section>
 
         <section class="normative">
