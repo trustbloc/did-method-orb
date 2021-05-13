@@ -398,14 +398,16 @@
         </p>
 
         <pre>
-          did-orb-format        = "did:orb:" cas-discovery-scheme [":" min-graph-cid]
-                                  ":" did-suffix [":" long-form-suffix-data]
-          cas-discovery-scheme  = dht-scheme / webcas-scheme / local-scheme
+          did-orb-format        = "did:orb:" (orb-canonical-did / orb-scheme-did / unpublished-did)
+          orb-canonical-did     = min-graph-cid ":" did-suffix
+          orb-scheme-did        = (dht-scheme / webcas-scheme) ":" orb-canonical-did
+          unpublished-did       = "interim:" (web-interim-scheme / local-interim-scheme)
           dht-scheme            = ( "ipfs" )
           webcas-scheme         = "webcas:" reg-name
-          local-scheme          = "local"
+          web-interim-scheme    = reg-name ":" did-suffix
+          local-interim-scheme  = "local" ":" did-suffix [":" long-form-suffix-data]
           reg-name              = 1*idchar                ; more constrained than [RFC3986]
-          min-graph-cid         = 1*idchar
+          min-graph-cid         = 10*idchar               ; a short 3rd segment is reserved for schemes.
           did-suffix            = 1*idchar
           long-form-suffix-data = 1*idchar                ; only applicable in the local-scheme
         </pre>
@@ -414,6 +416,10 @@
           See [[?RFC3986]] for the original definition of reg-name and [[DID-CORE]] for the definition of idchar.
           [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>long-form-suffix-data</i> elements.
         </p>
+
+        <pre class="example" title="A canonical Orb DID">
+          did:orb:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        </pre>
 
         <pre class="example" title="An Orb DID that uses the WebCAS scheme for content discovery">
           did:orb:webcas:example.com:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
@@ -424,7 +430,11 @@
         </pre>
 
         <p class="issue" title="default DHT">
-          TODO: discussion about not including a CAS discovery scheme and the possibility of a DHT profile for Orb.
+          TODO: discussion about the possibility of a DHT profile for Orb.
+        </p>
+
+        <p class="issue" title="maximum scheme length">
+          TODO: use an appropriate length to differentiate CID from scheme.
         </p>
       </section>
 
@@ -510,15 +520,15 @@
           This situation typically occurs when there is a need to immediately use a freshly created DID suffix that hasn't yet been propagated.
 
           <pre class="example highlight" title="Locally known DID">
-            did:orb:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
+            did:orb:interim:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
           </pre>
           
           <pre class="example highlight" title="Long-form DID">
-            did:orb:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA:ey...
+            did:orb:interim:local:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA:ey...
           </pre>
 
           <pre class="example highlight" title="Not yet propagated DID only known to example.com">
-            did:orb:webcas:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
+            did:orb:interim:example.com:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA
           </pre>
 
           When an Orb Server has propagation information for a resolved DID, the server includes the <i>min-graph-cid</i> segment within the <i>canonicalId</i>
@@ -528,6 +538,17 @@
           After a DID controller sends a <i>Create</i> or <i>Recover</i> operation to an Orb Server, the resolution result may have no (or an outdated) <i>min-graph-cid</i> segment.
           The DID controller may need to retry resolution until the operation has been propagated and the CID becomes available.
           Once the CID is available, resolution responses contain the updated <i>canonicalId</i> property.
+        </section>
+
+        <section class="normative">
+          <h3>CAS Discovery and Equivalent IDs</h3>
+
+          Orb DIDs support hints to enable a resolver to discover a CAS that is hosting the min-graph-cid in the DID string.
+          A hint can be added to an Orb DID string by adding a <i>scheme</i> prefix to the CID.
+          Please see <a href="#format">did:orb format</a> for more information about discovery schemes and examples.
+          These DIDs are treated as equivalent to the canonical DID.
+
+          An Orb resolution response MAY contain an <i>equivalentId</i> property that is populated with <i>orb-scheme-did</i> format DIDs.
         </section>
 
         <section class="normative">
