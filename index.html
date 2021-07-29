@@ -39,11 +39,6 @@
             publisher: "W3C CCG",
             status: "Draft Community Group Report"
           },
-          "CID": {
-            title: "CID (Content IDentifier) Specification",
-            href: "https://github.com/multiformats/cid",
-            publisher: "Multiformats"
-          },
           "HASHLINK": {
             title: "Cryptographic Hyperlinks",
             date: "May 2021",
@@ -439,16 +434,14 @@
         <pre>
           did-orb-format        = "did:orb:" (orb-canonical-did / orb-scheme-did / unpublished-did)
           orb-canonical-did     = min-graph-multihash ":" did-suffix
-          orb-scheme-did        = (hashlink-scheme / ipfs-scheme / webcas-scheme)
+          orb-scheme-did        = (hashlink-scheme / hostmeta-scheme)
           unpublished-did       = "interim:" reg-name ":" did-suffix [":" long-form-suffix-data]
           hashlink-scheme       = "hl:" min-graph-multihash ":" graph-hl-metadata ":" did-suffix
-          ipfs-scheme           = "ipfs:" cid ":" did-suffix
-          webcas-scheme         = "webcas:" reg-name ":" orb-canonical-did
+          hostmeta-scheme       = ("https" / "ipns") ":" reg-name ":" orb-canonical-did
           reg-name              = 1*idchar                ; more constrained than [RFC3986]
           min-graph-multihash   = 10*idchar               ; a short 3rd segment is reserved for schemes.
           graph-hl-metadata     = 1*idchar
           did-suffix            = 1*idchar
-          cid                   = 1*idchar
           long-form-suffix-data = 1*idchar                ; only applicable in the local-scheme
         </pre>
 
@@ -456,7 +449,6 @@
           See [[?RFC3986]] for the original definition of reg-name and [[DID-CORE]] for the definition of idchar.
           [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>long-form-suffix-data</i> elements.
           [[MULTIHASH]] and [[MULTIBASE]] defines the multihash and multibase formats.
-          [[CID]] defines the IPFS content identifier (CID) format.
         </p>
 
         <pre class="example" title="A canonical Orb DID">
@@ -467,24 +459,16 @@
           did:orb:hl:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:uoQ-Bc2h0dHBzOi8vZXhhbXBsZS5jb20:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
         </pre>
 
-        <pre class="example" title="An Orb DID that uses the WebCAS scheme for content discovery">
-          did:orb:webcas:example.com:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        <pre class="example" title="An Orb DID that uses the hostmeta HTTPS scheme for content discovery">
+          did:orb:https:example.com:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
         </pre>
 
-        <pre class="example" title="An Orb DID that uses the IPFS scheme for content discovery">
-          did:orb:ipfs:bafkreiatkubvbkdidscmqynkyls3iqawdqvthi7e6mbky2amuw3inxsi3y:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        <pre class="example" title="An Orb DID that uses the hostmeta IPNS scheme for content discovery">
+          did:orb:ipns:k51qzi5uqu5dl3ua2aal8vdw82j4i8s112p495j1spfkd2blqygghwccsw1z0p:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
         </pre>
-
-        <p class="issue" title="default DHT">
-          TODO: discussion about the possibility of a DHT profile for Orb.
-        </p>
 
         <p class="issue" title="maximum scheme length">
           TODO: use an appropriate length to differentiate graph multihash from scheme.
-        </p>
-
-        <p class="issue" title="remove webcas scheme">
-          TODO: the Hashlink scheme is intended to replace the webcas scheme and potentially the ipfs scheme as well.
         </p>
       </section>
 
