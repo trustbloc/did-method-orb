@@ -433,20 +433,21 @@
 
         <pre>
           did-orb-format     = "did:orb:" (orb-scheme-did / orb-long-form-did / orb-canonical-did)
-          orb-canonical-did  = graph-hash ":" did-suffix
-          orb-long-form-did  = graph-hash ":" did-suffix ":" did-suffix-data
-          orb-metadata-did   = graph-hash [":" graph-metadata] ":" did-suffix [":" did-suffix-data]
+          orb-canonical-did  = anchor-hash ":" did-suffix
+          orb-long-form-did  = anchor-hash ":" did-suffix ":" did-suffix-data
+          orb-scheme-did     = scheme path ":" orb-metadata-did
+          orb-metadata-did   = anchor-hash [":" hash-metadata] ":" did-suffix [":" did-suffix-data]
           scheme             = 1*idchar
           path               = *(":" segment)
           segment            = 1*idchar               ; more constrained than [RFC3986]
-          graph-hash         = 1*idchar
-          graph-metadata     = 1*idchar
+          anchor-hash        = 1*idchar
+          hash-metadata      = 1*idchar
           did-suffix         = 1*idchar
           did-suffix-data    = 1*idchar
         </pre>
 
         <p>
-          See [[?RFC3986]] for the original definition of reg-name and [[DID-CORE]] for the definition of idchar.
+          See [[?RFC3986]] for the original definition of <i>scheme</i> and <i>path</i> and [[DID-CORE]] for the definition of <i>idchar</i>.
           [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>did-suffix-data</i> elements.
           [[MULTIHASH]] and [[MULTIBASE]] defines the multihash and multibase formats.
         </p>
@@ -831,7 +832,7 @@
         <p>
           The hostmeta schemes fetch service discovery information using the JRD form of hostmeta [[RFC6415]].
           To retrieve `host-meta.json`, the `scheme` and `path` segments of the Orb DID are converted into a URL.
-          The DID is transformed into a URL by replacing `:` in the `path segments with `/` and prefixing the `scheme`.
+          The DID is transformed into a URL by replacing `:` in the `path` segments with `/` and prefixing the `scheme`.
           From the transformed URL, the host-meta.json can be retrieved according to [[RFC6415]].
         </p>
 
