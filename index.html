@@ -432,22 +432,22 @@
         </p>
 
         <pre>
-          did-orb-format        = "did:orb:" (orb-scheme-did / orb-long-form-did / orb-canonical-did)
-          orb-canonical-did     = min-graph-multihash ":" did-suffix
-          orb-long-form-did     = min-graph-multihash ":" did-suffix ":" long-form-suffix-data
-          orb-scheme-did        = (hashlink-scheme / hostmeta-scheme)
-          hashlink-scheme       = "hl:" min-graph-multihash ":" graph-hl-metadata ":" did-suffix
-          hostmeta-scheme       = ("https" / "ipns") ":" reg-name ":" (orb-long-form-did / orb-canonical-did)
-          reg-name              = 1*idchar               ; more constrained than [RFC3986]
-          min-graph-multihash   = 1*idchar
-          graph-hl-metadata     = 1*idchar
-          did-suffix            = 1*idchar
-          long-form-suffix-data = 1*idchar
+          did-orb-format     = "did:orb:" (orb-scheme-did / orb-long-form-did / orb-canonical-did)
+          orb-canonical-did  = graph-hash ":" did-suffix
+          orb-long-form-did  = graph-hash ":" did-suffix ":" did-suffix-data
+          orb-metadata-did   = graph-hash [":" graph-metadata] ":" did-suffix [":" did-suffix-data]
+          scheme             = 1*idchar
+          path               = *(":" segment)
+          segment            = 1*idchar               ; more constrained than [RFC3986]
+          graph-hash         = 1*idchar
+          graph-metadata     = 1*idchar
+          did-suffix         = 1*idchar
+          did-suffix-data    = 1*idchar
         </pre>
 
         <p>
           See [[?RFC3986]] for the original definition of reg-name and [[DID-CORE]] for the definition of idchar.
-          [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>long-form-suffix-data</i> elements.
+          [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>did-suffix-data</i> elements.
           [[MULTIHASH]] and [[MULTIBASE]] defines the multihash and multibase formats.
         </p>
 
@@ -471,19 +471,7 @@
         <pre class="example" title="An Orb DID without anchoring information">
           did:orb:uAAA:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
         </pre>
-
-        <pre class="example" title="An Orb DID that uses the Hashlink scheme for content discovery">
-          did:orb:hl:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:uoQ-Bc2h0dHBzOi8vZXhhbXBsZS5jb20:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
-        </pre>
-
-        <pre class="example" title="An Orb DID that uses the hostmeta HTTPS scheme for content discovery">
-          did:orb:https:example.com:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
-        </pre>
-
-        <pre class="example" title="An Orb DID that uses the hostmeta IPNS scheme for content discovery">
-          did:orb:ipns:k51qzi5uqu5dl3ua2aal8vdw82j4i8s112p495j1spfkd2blqygghwccsw1z0p:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
-        </pre>
-      </section>
+    </section>
 
     <section class="normative">
         <h2>Client-to-Server Operations</h2>
@@ -560,9 +548,9 @@
           <h3>Propagation Delay and Canonical IDs</h3>
 
           Orb DIDs support Sidetree <a href="https://identity.foundation/sidetree/spec/#did-uri-composition">DID URI Composition</a>
-          for the <i>did-suffix</i> and <i>long-form-suffix-data</i> elements.
+          for the <i>did-suffix</i> and <i>did-suffix-data</i> elements.
           
-          An Orb resolver with previous knowledge of a particular suffix (or with the inclusion of <i>long-form-suffix-data</i>) is able
+          An Orb resolver with previous knowledge of a particular suffix (or with the inclusion of <i>did-suffix-data</i>) is able
           to return a resolution result without additional prefix information.
           This situation typically occurs when there is a need to immediately use a freshly created DID suffix that hasn't yet been propagated.
 
@@ -791,6 +779,80 @@
     </section>
 
     <section class="normative">
+      <h2>Anchor Discovery</h2>
+
+      <section class="normative">
+        <h3>Schemes</h3>
+
+        <table class="simple">
+          <thead>
+            <tr>
+              <th>Orb URI Scheme</th>
+              <th>Description</th>
+              <th>Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>hl</td>
+              <td>Hashlink retrieval of anchor</td>
+              <td><a href="#hashlink"></a></td>
+            </tr>
+            <tr>
+              <td>https</td>
+              <td>Hostmeta discovery (via https)</td>
+              <td><a href="#hostmeta"></a></td>
+            </tr>
+            <tr>
+              <td>ipns</td>
+              <td>Hostmeta discovery (via ipns)</td>
+              <td><a href="#hostmeta"></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="normative">
+        <h3>Hashlink</h3>
+
+        <p>
+          The scheme uses a hashlink [[HASHLINK]] including the multihash of the latest anchor object and metadata containing URLs to the anchor object.
+          The first segment after `did:orb` contains the anchor multihash, the second segment contains the hashlink metadata and the third segment contains the Sidetree DID suffix.
+        </p>
+
+        <pre class="example" title="An Orb DID that uses a Hashlink for anchor retrieval">
+          did:orb:hl:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:uoQ-Bc2h0dHBzOi8vZXhhbXBsZS5jb20:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        </pre>
+      </section>
+
+      <section class="normative">
+        <h3>Hostmeta</h3>
+
+        <p>
+          The hostmeta schemes fetch service discovery information using the JRD form of hostmeta [[RFC6415]].
+          To retrieve `host-meta.json`, the `scheme` and `path` segments of the Orb DID are converted into a URL.
+          The DID is transformed into a URL by replacing `:` in the `path segments with `/` and prefixing the `scheme`.
+          From the transformed URL, the host-meta.json can be retrieved according to [[RFC6415]].
+        </p>
+
+        <pre class="example" title="An Orb DID that uses the hostmeta HTTPS scheme for anchor discovery">
+          did:orb:https:example.com:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        </pre>
+
+        <pre class="example" title="An Orb DID that uses the hostmeta IPNS scheme for anchor discovery">
+          did:orb:ipns:k51qzi5uqu5dl3ua2aal8vdw82j4i8s112p495j1spfkd2blqygghwccsw1z0p:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+        </pre>
+
+        <p class="issue" title="Describe JRD">
+          Add description and example of Orb JRD.
+        </p>
+
+        <pre class="example" title="Hostmeta JRD">
+        </pre>
+      </section>
+    </section>
+
+    <section class="normative">
       <h2>Witness Ledger</h2>
 
       <section class="normative">
@@ -799,15 +861,15 @@
         <table class="simple">
           <thead>
             <tr>
-              <th>Name</th>
               <th>Type Code</th>
-              <th>Specification</th>
+              <th>Description</th>
+              <th>Reference</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Verifiable Credential Transparency</td>
               <td>vct-v1</td>
+              <td>Verifiable Credential Transparency</td>
               <td><a href="#vct-v1"></a></td>
             </tr>
           </tbody>
