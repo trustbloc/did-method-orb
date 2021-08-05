@@ -449,7 +449,7 @@
         <p>
           See [[?RFC3986]] for the original definition of <i>scheme</i> and <i>path</i> and [[DID-CORE]] for the definition of <i>idchar</i>.
           [[SIDETREE]] provides additional explanation for the <i>did-suffix</i> and <i>did-suffix-data</i> elements.
-          [[MULTIHASH]] and [[MULTIBASE]] defines the multihash and multibase formats.
+          [[MULTIHASH]] and [[MULTIBASE]] defines the multihash and multibase formats that are used for the <i>anchor-hash</i> element.
         </p>
 
         <p>
@@ -563,11 +563,11 @@
             did:orb:https:example.com:uAAA:EiA329wd6Aj36YRmp7NGkeB5ADnVt8ARdMZMPzfXsjwTJA:ey...
           </pre>
 
-          When an Orb Server has propagation information for a resolved DID, the server includes the <i>min-graph-multihash</i> segment within the <i>canonicalId</i>
+          When an Orb Server has propagation information for a resolved DID, the server includes the <i>anchor-hash</i> segment within the <i>canonicalId</i>
           property of the returned DID document metadata.
-          The <i>min-graph-multihash</i> is set to the multihash (with multibase prefix) of the latest known AnchorCredential that contains a <i>Create</i> or <i>Recover</i> operation for the DID.
+          The <i>anchor-hash</i> is set to the multihash (with multibase prefix) of the latest known AnchorCredential that contains a <i>Create</i> or <i>Recover</i> operation for the DID.
 
-          After a DID controller sends a <i>Create</i> or <i>Recover</i> operation to an Orb Server, the resolution result may have no (or an outdated) <i>min-graph-multihash</i> segment.
+          After a DID controller sends a <i>Create</i> or <i>Recover</i> operation to an Orb Server, the resolution result may have no (or an outdated) <i>anchor-hash</i> segment.
           The DID controller may need to retry resolution until the operation has been propagated and the multihash becomes available.
           Once the multihash is available, resolution responses contain the updated <i>canonicalId</i> property.
         </section>
@@ -575,7 +575,7 @@
         <section class="normative">
           <h3>CAS Discovery and Equivalent IDs</h3>
 
-          Orb DIDs support hints to enable a resolver to discover a CAS that is hosting the min-graph-multihash in the DID string.
+          Orb DIDs support hints to enable a resolver to discover a CAS that is hosting the anchor-hash in the DID string.
           A hint can be added to an Orb DID string by adding a <i>scheme</i> prefix to the multihash.
           Please see <a href="#format">did:orb format</a> for more information about discovery schemes and examples.
           These DIDs are treated as equivalent to the canonical DID.
@@ -809,6 +809,11 @@
               <td>Hostmeta discovery (via ipns)</td>
               <td><a href="#hostmeta"></a></td>
             </tr>
+            <tr>
+              <td>ipfs</td>
+              <td>IPFS retrieval of anchor</td>
+              <td><a href="#ipfs"></a></td>
+            </tr>
           </tbody>
         </table>
       </section>
@@ -849,6 +854,27 @@
         </p>
 
         <pre class="example" title="Hostmeta JRD">
+        </pre>
+      </section>
+      <section class="normative">
+        <h3>IPFS</h3>
+
+        <p>
+          The scheme retrieves the anchor object from IPFS.
+          To retrieve the anchor object, the multihash must be converted into an IPFS URL (containing an IPFS CID).
+          The multihash is transformed into a CID as follows:
+        </p>
+
+        <ul>
+          <li>Multibase: base32</li>
+          <li>CID version: 1</li>
+          <li>Multicodec: raw (0x55)</li>
+          <li>Multihash: the anchor multihash in the DID</li>
+        </ul>
+
+        <pre class="example" title="Converting anchor multihash to an IPFS URL containing a CID v1 (base32)">
+          DID: did:orb:ipfs:uEiDlXjleTwr4eZalpXVy086zs-TPK-h54ojbpl7EBvZeHQ:EiDyOQbbZAa3aiRzeCkV7LOx3SERjjH93EXoIM3UoN4oWg
+          URL: ipfs://bafkreihfly4v4tyk7b4znjnfovznhtvtwpsm6k7iphrirw5gl3can5s6du
         </pre>
       </section>
     </section>
