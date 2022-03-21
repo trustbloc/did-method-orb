@@ -50,6 +50,17 @@
             status: "Internet-Draft",
             publisher: "IETF"
           },
+          "LINKSET": {
+            title: "Linkset: Media Types and a Link Relation Type for Link Sets",
+            date: "February 2022",
+            href: "https://tools.ietf.org/html/draft-ietf-httpapi-linkset-08",
+            authors: [
+              "E. Wilde",
+              "H. Van de Sompel"
+            ],
+            status: "Internet-Draft",
+            publisher: "IETF"
+          },
           "MULTIHASH": {
             title: "The Multihash Data Format",
             date: "February 2021",
@@ -758,27 +769,35 @@
           <p>
             Orb specifies anchoring metadata for the Sidetree core index file.
             This metadata includes each DID included in the index along with a hashlink to the previous anchor.
-            The metadata is formatted as a JSON resource descriptor (JRD) [[RFC6415]].
+            The metadata is formatted as a Linkset [[LINKSET]].
           </p>
 
           <p>
-            The <i>subject</i> is the hashlink to the Sidetree core index file.
-            The <i>generator</i> is the version of the Orb spec (e.g., <i>https://w3id.org/orb#v1</i>).
+            The <i>anchor</i> property contains the hashlink to the Sidetree core index file.
+            The <i>profile</i> property contains the version of the Orb spec (e.g., <i>https://w3id.org/orb#v1</i>).
+            The <i>author</i> property contains the Orb server URI that published the anchor.
+            The <i>item</i> property contains a collection of the DIDs contained in the Sidetree files (referenced by <i>anchor</i>).
+            The <i>previous</i> property (within an <i>item</i> contains a hashlink to the previous anchor that contained a Sidetree operation for the DID.
           </p>
 
           <pre class="example highlight" title="Orb Anchor Properties">
-          {
-            "properties": {
-              "https://w3id.org/activityanchors#generator": "https://w3id.org/orb#v1",
-              "https://w3id.org/activityanchors#resources": [
+            {
+              "linkset": [
                 {
-                  "id": "did:orb:uEiAL-T2TdNkqL5gRIX8BZvrXESPOzoIYy98YUBxc5xAG0w:EiCIZ0W-fdodoK39vGPl1rxDJTinYN2kTBhddS9xnen-Aw",
-                  "previousAnchor": "hl:uEiAL-T2TdNkqL5gRIX8BZvrXESPOzoIYy98YUBxc5xAG0w"
+                  "anchor": "hl:uEiDkZV2rw2XKdqPoGKy6Vg0HEk36HfsxyWfnY3jp3Q2K-g",
+                  "author": "https://orb.domain2.com/services/orb",
+                  "item":[
+                    {"href": "did:orb:uAAA:EiBTRfNkzKwW3ZVDl6WwXsYhre6HPE8jQ7e9l3m6pii-iw"},
+                    {
+                      "href": "did:orb:uAAA:EiCUt537plK2HuI0k2rQNP3MgDtq1T5Wj_LZ7yQOJY2gcA",
+                      "previous": ["hl:uEiA30C_KU_wogvUhJKLUA8bXHqSM_75X1QZQN3z_4VacXQ"]
+                    },
+                    {"href": "did:orb:uAAA:EiDpy0--tFbSNGG-UNce9_yXfRBFQ9kkme8SREFLUiaK6g"},
+                    {"href": "did:orb:uAAA:EiAVOBVLnwIgF6f83JfJUi82mhfAQ2oVKpsZCfkt5tX2aQ"},
+                  "profile": "https://w3id.org/orb#v1"
                 }
               ]
-            },
-            "subject": "hl:uEiA30C_KU_wogvUhJKLUA8bXHqSM_75X1QZQN3z_4VacXQ:uoQ-BeEJpcGZzOi8vYmFma3JlaWJ4MmF4NHV1NzRmY2Jwa2lqZXVsa2Focnd4ZDJzaXo3NTZrN2txbXVieHB0NzZjdnU0bHU"
-          }
+            }
           </pre>
         </section>
     </section>
